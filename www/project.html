@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    {{template "nav.html"}}
+    <h1>{{.Name}}</h1>
+    <h2>Dépenses</h2>
+    <button onclick="location.href='/{{.ProjectId}}/expenses/add'">Ajouter une dépense</button>
+    {{range .Expenses}}
+    <p>{{.Name}} - {{.Amount}} -
+        <a href="/{{$.ProjectId}}/expenses/{{.Id}}">Voir</a>
+    </p>
+    {{end}}
+    <button onclick="location.href='/{{$.ProjectId}}/members/add'">Ajouter un membre</button>
+</body>
+
+</html>

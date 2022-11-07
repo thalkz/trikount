@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    {{template "nav.html"}}
+
+    <h1>{{.ProjectName}}</h1>
+    <h2>Equilibre</h2>
+    {{range .Transfers}}
+    <p>{{.From}} -> {{.To}} {{.Amount}}</p>
+    {{end}}
+</body>
+
+</html>

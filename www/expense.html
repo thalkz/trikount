@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    {{template "nav.html"}}
+    <h1>{{.Name}}</h1>
+    <h2>Total: {{.Amount}}</h2>
+    {{range .Parts}}
+    <p>{{.MemberName}} - {{.Amount}}</p>
+    {{end}}
+</body>
+
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    {{template "nav.html"}}
+
+    <h1>Ajouter une dépense</h1>
+    <form>
+        <label for="name">
+            Nom
+            <input type="text" id="name" name="name" required>
+        </label>
+        <label for="amount">
+            Valeur
+            <input type="number" value="0" min="0" step="0.01" id="amount" name="amount" required>
+        </label>
+        <button type="submit">OK</button>
+    </form>
+</body>
+
+</html>

@@ -5,6 +5,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/thalkz/trikount/database"
+	"github.com/thalkz/trikount/error_helper"
 )
 
 func AddMember(c *gin.Context) {
@@ -16,6 +18,11 @@ func AddMember(c *gin.Context) {
 		return
 	}
 
-	// TODO Add Member
+	err := database.AddMember(projectId, memberName)
+	if err != nil {
+		error_helper.HTML(http.StatusInternalServerError, err, c)
+		return
+	}
+
 	c.Redirect(http.StatusFound, fmt.Sprintf("/%s", projectId))
 }

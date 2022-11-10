@@ -38,8 +38,9 @@ func Setup() (close func() error, err error) {
 
 	_, err = db.Exec(`CREATE TABLE IF NOT EXISTS expenses (
 		id integer NOT NULL PRIMARY KEY,
-		title text NOT NULL,
 		project_id text,
+		title text NOT NULL,
+		amount real NOT NULL,
 		paid_by integer,
 		FOREIGN KEY (project_id) REFERENCES projects(id),
 		FOREIGN KEY (paid_by) REFERENCES members(id)
@@ -49,14 +50,14 @@ func Setup() (close func() error, err error) {
 		return
 	}
 
-	_, err = db.Exec(`CREATE TABLE IF NOT EXISTS expenses_members (
+	_, err = db.Exec(`CREATE TABLE IF NOT EXISTS spent_by (
 		expense_id integer,
 		member_id integer,
 		FOREIGN KEY (expense_id) REFERENCES expenses(id),
 		FOREIGN KEY (member_id) REFERENCES members(id)
 	)`)
 	if err != nil {
-		err = errors.Wrap(err, "failed to create expenses_members table")
+		err = errors.Wrap(err, "failed to create spent_by table")
 		return
 	}
 

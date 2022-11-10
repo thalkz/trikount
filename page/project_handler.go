@@ -4,32 +4,37 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/thalkz/trikount/database"
+	"github.com/thalkz/trikount/error_helper"
+	"github.com/thalkz/trikount/models"
 )
 
 type projectPage struct {
 	ProjectId string
 	Name      string
-	Expenses  []expense
-}
-
-type expense struct {
-	Id     int
-	Name   string
-	Amount int
+	Expenses  []*models.Expense
 }
 
 func Project(c *gin.Context) {
 	projectId := c.Param("projectId")
 
-	c.HTML(http.StatusOK, "project.html", projectPage{
+	project, err := database.GetProject(projectId)
+	if err != nil {
+		error_helper.HTML(http.StatusInternalServerError, err, c)
+		return
+	}
+
+	expenses, err := database.GetExpenses(projectId)
+	if err != nil {
+		error_helper.HTML(http.StatusInternalServerError, err, c)
+		return
+	}
+
+	data := projectPage{
 		ProjectId: projectId,
-		Name:      "Project Name",
-		Expenses: []expense{
-			{
-				Id:     1,
-				Name:   "Resto",
-				Amount: 10,
-			},
-		},
-	})
+		Name:      project.Name,
+		Expenses:  expenses,
+	}
+
+	c.HTML(http.StatusOK, "project.html", data)
 }

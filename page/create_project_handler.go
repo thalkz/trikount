@@ -21,11 +21,13 @@ func CreateProject(c *gin.Context) {
 		projectId, err := findAvailableProjectId()
 		if err != nil {
 			error_helper.HTML(http.StatusInternalServerError, err, c)
+			return
 		}
 
 		err = database.CreateProject(projectId, projectName, time.Now())
 		if err != nil {
 			error_helper.HTML(http.StatusInternalServerError, err, c)
+			return
 		}
 
 		c.Redirect(http.StatusFound, fmt.Sprintf("/%s", projectId))

@@ -8,6 +8,5 @@ type Expense struct {
 	Amount    float32
 	PaidBy    Member
 	SpentBy   []Member
-	CreatedAt time.Time
 	UpdatedAt time.Time
 }

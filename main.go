@@ -1,11 +1,11 @@
 package main
 
 import (
-	"net/http"
+	"log"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/mattn/go-sqlite3"
-	page "github.com/thalkz/trikount/pages"
+	"github.com/thalkz/trikount/page"
 )
 
 func handlePing(c *gin.Context) {

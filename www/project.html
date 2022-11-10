@@ -7,7 +7,7 @@
     <h2>Dépenses</h2>
     <button onclick="location.href='/{{.ProjectId}}/expenses/add'">Ajouter une dépense</button>
     {{range .Expenses}}
-    <p>{{.Title}} - {{.Amount}} (Payé par: {{.PaidBy.Name}})
+    <p>{{.Title}} - {{.FormattedAmount}} (Payé par: {{.PaidBy.Name}})
         <a href="/{{$.ProjectId}}/expenses/{{.Id}}">Voir</a>
     </p>
     {{end}}

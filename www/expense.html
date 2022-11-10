@@ -3,10 +3,10 @@
 
 <body>
     {{template "nav.html"}}
-    <h1>{{.Name}}</h1>
-    <h2>Total: {{.Amount}}</h2>
-    {{range .Parts}}
-    <p>{{.MemberName}} - {{.Amount}}</p>
+    <h1>{{.Expense.Title}}</h1>
+    <h2>Total: {{.Expense.FormattedAmount}}</h2>
+    {{range .Expense.SpentBy}}
+    <p>{{.Name}} - {{$.Expense.FormattedAmountPerMember}}</p>
     {{end}}
 </body>
 

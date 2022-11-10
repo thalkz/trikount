@@ -2,34 +2,32 @@ package page
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/thalkz/trikount/database"
+	"github.com/thalkz/trikount/error_helper"
+	"github.com/thalkz/trikount/models"
 )
 
 type expensePage struct {
-	Name   string
-	Amount float32
-	Parts  []expensePagePart
-}
-
-type expensePagePart struct {
-	MemberName string
-	Amount     float32
+	Expense *models.Expense
 }
 
 func Expense(c *gin.Context) {
+	expenseIdStr := c.Param("expenseId")
+
+	expenseId, err := strconv.Atoi(expenseIdStr)
+	if err != nil {
+		error_helper.HTML(http.StatusBadRequest, err, c)
+	}
+
+	expense, err := database.GetExpense(expenseId)
+	if err != nil {
+		error_helper.HTML(http.StatusInternalServerError, err, c)
+	}
+
 	c.HTML(http.StatusOK, "expense.html", expensePage{
-		Name:   "Resto",
-		Amount: 11.50,
-		Parts: []expensePagePart{
-			{
-				MemberName: "Roland",
-				Amount:     1.0,
-			},
-			{
-				MemberName: "H",
-				Amount:     10.5,
-			},
-		},
+		Expense: expense,
 	})
 }

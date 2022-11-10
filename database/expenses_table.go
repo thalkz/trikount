@@ -29,11 +29,11 @@ func AddExpense(projectId string, title string, amount float64, paidBy int, spen
 	return nil
 }
 
-func GetExpenses(id string) ([]*models.Expense, error) {
+func GetExpenses(projectId string) ([]*models.Expense, error) {
 	rows, err := db.Query(`SELECT expenses.id, title, amount, members.id, members.name
 		FROM expenses 
 		JOIN members ON expenses.paid_by = members.id
-		WHERE expenses.project_id = $1`, id)
+		WHERE expenses.project_id = $1`, projectId)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to get expenses")
 	}
@@ -53,4 +53,46 @@ func GetExpenses(id string) ([]*models.Expense, error) {
 	}
 
 	return expenses, nil
+}
+
+func GetExpense(id int) (*models.Expense, error) {
+	row := db.QueryRow(`SELECT expenses.id, expenses.title, expenses.amount, members.id, members.name
+		FROM expenses 
+		JOIN members ON expenses.paid_by = members.id
+		WHERE expenses.id = $1`, id)
+
+	var expense models.Expense
+	err := row.Scan(&expense.Id, &expense.Title, &expense.Amount, &expense.PaidBy.Id, &expense.PaidBy.Name)
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to scan expense")
+	}
+
+	err = row.Err()
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to get expense")
+	}
+
+	rows, err := db.Query(`SELECT members.id, members.name 
+		FROM spent_by
+		JOIN members ON spent_by.member_id = members.id
+		WHERE spent_by.expense_id = $1`, id)
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to get spent_by members")
+	}
+
+	for rows.Next() {
+		var member models.Member
+		err = rows.Scan(&member.Id, &member.Name)
+		if err != nil {
+			return nil, errors.Wrap(err, "failed to scan spent_by member")
+		}
+		expense.SpentBy = append(expense.SpentBy, member)
+	}
+
+	err = rows.Err()
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to get spent_by members")
+	}
+
+	return &expense, nil
 }

@@ -1,6 +1,10 @@
 package models
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/thalkz/trikount/format"
+)
 
 type Transfer struct {
 	Amount float64
@@ -8,6 +12,10 @@ type Transfer struct {
 	To     Member
 }
 
+func (t Transfer) FormattedAmount() string {
+	return format.ToEuro(t.Amount)
+}
+
 func (t Transfer) String() string {
-	return fmt.Sprintf("%v -> %v %.2f€", t.From, t.To, t.Amount)
+	return fmt.Sprintf("%v -> %v %v", t.From, t.To, format.ToEuro(t.Amount))
 }

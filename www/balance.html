@@ -4,7 +4,11 @@
 <body>
     {{template "nav.html"}}
 
-    <h1>{{.ProjectName}}</h1>
+    <h1>Balance</h1>
+    {{range .Balance}}
+    <p>{{.Name}} : payé: {{.Paid}}, dépensé: {{.Spent}}</p>
+    {{end}}
+
     <h2>Equilibre</h2>
     {{range .Transfers}}
     <p>{{.From}} -> {{.To}} {{.Amount}}</p>

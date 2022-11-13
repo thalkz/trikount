@@ -61,5 +61,35 @@ func Setup() (close func() error, err error) {
 		return
 	}
 
+	// Create a `parts` view, that is used to query the current balance
+	_, err = db.Exec(`CREATE VIEW IF NOT EXISTS v_parts AS
+		SELECT expense_id, project_id, title, amount / COUNT(*) amount
+			FROM expenses
+			JOIN spent_by ON expenses.id = spent_by.expense_id
+			GROUP BY expenses.id`)
+	if err != nil {
+		err = errors.Wrap(err, "failed to create parts view")
+		return
+	}
+
+	_, err = db.Exec(`CREATE VIEW IF NOT EXISTS v_spent_balance AS
+		SELECT spent_by.member_id, SUM(amount) amount
+			FROM v_parts
+			JOIN spent_by ON spent_by.expense_id = v_parts.expense_id
+			GROUP BY spent_by.member_id;`)
+	if err != nil {
+		err = errors.Wrap(err, "failed to create spent_balance view")
+		return
+	}
+
+	_, err = db.Exec(`CREATE VIEW IF NOT EXISTS v_paid_balance AS
+		SELECT paid_by AS member_id, project_id, SUM(amount) amount 
+		FROM expenses 
+		GROUP BY paid_by`)
+	if err != nil {
+		err = errors.Wrap(err, "failed to create paid_balance view")
+		return
+	}
+
 	return
 }

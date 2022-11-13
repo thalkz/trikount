@@ -5,8 +5,6 @@ type Member struct {
 	Name string
 }
 
-type MemberBalance struct {
-	Member
-	Spent float64
-	Paid  float64
+func (t Member) String() string {
+	return t.Name
 }

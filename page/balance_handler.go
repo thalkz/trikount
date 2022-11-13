@@ -11,13 +11,7 @@ import (
 
 type balancePage struct {
 	Balance   []*models.MemberBalance
-	Transfers []*balancePageTransfer
-}
-
-type balancePageTransfer struct {
-	Amount float32
-	From   string
-	To     string
+	Transfers []*models.Transfer
 }
 
 func Balance(c *gin.Context) {
@@ -29,7 +23,10 @@ func Balance(c *gin.Context) {
 		return
 	}
 
+	transfers := balance.GetTransfers()
+
 	c.HTML(http.StatusOK, "balance.html", balancePage{
-		Balance: balance,
+		Balance:   balance.Members,
+		Transfers: transfers,
 	})
 }

@@ -1,39 +1,42 @@
 <!DOCTYPE html>
 <html>
 
+{{template "head.html"}}
+
 <body>
-    {{template "nav.html"}}
+    <div id="app">
+        <main>
+            {{template "nav.html"}}
 
-    <h1>Ajouter une dépense</h1>
-    <form>
-        <label for="name">
-            Nom
-            <input type="text" id="name" name="name" required>
-        </label>
-        <label for="amount">
-            Valeur
-            <input type="number" value="0" min="0" step="0.01" id="amount" name="amount" required>
-        </label>
+            <h3>Nouvelle dépense</h3>
+            <form>
+                <input type="text" id="name" name="name" placeholder="Titre" required>
+                <input type="number" value="0" min="0" step="0.01" id="amount" name="amount" required>
+                <br /><br />
+                <label for="cars">Payé par</label>
+                <select name="paid_by" id="paid_by">
+                    <option value="">--- Please select ---</option>
+                    {{range .Members}}
+                    <option value="{{.Id}}">{{.Name}}</option>
+                    {{end}}
+                </select>
+                <br /><br />
 
-        <br/>
-
-        <label for="cars">Paid by</label>
-        <select name="paid_by" id="paid_by">
-            <option value="">--- Please select ---</option>
-            {{range .Members}}
-            <option value="{{.Id}}">{{.Name}}</option>
-            {{end}}
-        </select>
-
-        <p>For</p>
-        {{range .Members}}
-        <div>
-            <input type="checkbox" id="{{.Id}}" name="{{.Id}}" >
-            <label for="{{.Id}}">{{.Name}}</label>
-        </div>
-        {{end}}
-        <button type="submit">OK</button>
-    </form>
+                <label>Pour</label>
+                {{range .Members}}
+                <div>
+                    <input type="checkbox" id="{{.Id}}" name="{{.Id}}">
+                    <label for="{{.Id}}">{{.Name}}</label>
+                </div>
+                {{end}}
+                <br />
+                <button class="button has-icon full" type="submit">
+                    <i class="fa-solid fa-check"></i>
+                    <span>Ajouter</span>
+                </button>
+            </form>
+        </main>
+    </div>
 </body>
 
 </html>

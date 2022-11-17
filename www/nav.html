@@ -1,6 +1,7 @@
-<div class="nav">
-    <a id="nav-expense">dépenses</a> <a id="nav-balance">équilibres</a> <a
-        id="nav-settings">paramètres</a>
+<div id="nav">
+    <h1>Trikount</h1>
+    <a id="nav-expense">dépenses 💸</a><a id="nav-balance">équilibres ⚖️</a>  <a
+        id="nav-settings">paramètres ⚙️</a>
     <script>
         var projectId = window.location.pathname.split("/")[1]
         console.log(window.location.pathname)
@@ -9,3 +10,4 @@
         document.getElementById("nav-settings").href = `/${projectId}/settings`; 
     </script>
 </div>
+<br/>

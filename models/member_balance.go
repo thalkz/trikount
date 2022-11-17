@@ -17,5 +17,5 @@ func (b MemberBalance) Balance() float64 {
 }
 
 func (b MemberBalance) FormattedBalance() string {
-	return format.ToEuro(b.Balance())
+	return format.ToSignedEuro(b.Balance())
 }

@@ -19,6 +19,7 @@ func main() {
 
 	r := gin.Default()
 	r.LoadHTMLGlob("www/*")
+	r.Static("/assets", "./assets")
 
 	r.GET("/", page.Home)
 	r.GET("/create", page.CreateProject)

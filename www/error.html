@@ -1,9 +1,15 @@
 <!DOCTYPE html>
 <html>
 
+{{template "head.html"}}
+
 <body>
-    <h1>Error {{.Code}} - {{.Title}}</h1>
-    <p>{{.Message}}</p>
+    <div id="app">
+        <main>
+            <h1>Error {{.Code}} - {{.Title}}</h1>
+            <p>{{.Message}}</p>
+        </main>
+    </div>
 </body>
 
 </html>

@@ -1,17 +1,23 @@
 <!DOCTYPE html>
 <html>
 
-<body>
-    {{template "nav.html"}}
-    <h1>Créer un Trikount</h1>
-    <form>
-        <label for="name">
-            Nom du Trikount
-            <input type="text" id="name" name="name" required>
-        </label>
+{{template "head.html"}}
 
-        <button type="submit">Créer</button>
-    </form>
+<body>
+    <div id="app">
+        <main>
+            <h1>Créer un Trikount</h1>
+            <form>
+                <input type="text" id="name" name="name" placeholder="Trikount des colocs..." required>
+                <br />
+                <br />
+                <button class="button has-icon full" type="submit">
+                    <i class="fa-solid fa-check"></i>
+                    <span>Créer</span>
+                </button>
+            </form>
+        </main>
+    </div>
 </body>
 
 </html>

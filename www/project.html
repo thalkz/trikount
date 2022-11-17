@@ -1,17 +1,36 @@
 <!DOCTYPE html>
 <html>
 
+{{template "head.html"}}
+
 <body>
-    {{template "nav.html"}}
-    <h1>{{.Name}}</h1>
-    <h2>Dépenses</h2>
-    <button onclick="location.href='/{{.ProjectId}}/expenses/add'">Ajouter une dépense</button>
-    {{range .Expenses}}
-    <p>{{.Title}} - {{.FormattedAmount}} (Payé par: {{.PaidBy.Name}})
-        <a href="/{{$.ProjectId}}/expenses/{{.Id}}">Voir</a>
-    </p>
-    {{end}}
-    <button onclick="location.href='/{{$.ProjectId}}/members/add'">Ajouter un membre</button>
+    <div id="app">
+        <main>
+            {{template "nav.html"}}
+            <h1>{{.Name}}</h1>
+
+            <button class="has-icon is-outline" onclick="location.href='/{{$.ProjectId}}/members/add'">
+                <i class="fa-solid fa-user-plus"></i>
+                <span>Ajouter un participant</span>
+            </button>
+            {{if not .Expenses}}
+                <p>Il n'y a aucunes dépenses pour le moment ! Penses à partager le lien du Trikount pour que les participants puissent ajouter leurs dépenses.</p>
+            {{else}}
+            <button class="has-icon" onclick="location.href='/{{.ProjectId}}/expenses/add'">
+                <i class="fa-solid fa-plus"></i>
+                <span>Nouvelle dépense</span>
+            </button>
+            {{range .Expenses}}
+            <p onclick="location.href='/{{$.ProjectId}}/expenses/{{.Id}}'">{{.Title}} •
+                <b>{{.FormattedAmount}}</b><br />
+                <small>payé par {{.PaidBy.Name}}</small>
+            </p>
+            <hr />
+            {{end}}
+            {{end}}
+        </main>
+        {{template "footer.html"}}
+    </div>
 </body>
 
 </html>

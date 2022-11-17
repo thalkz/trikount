@@ -1,18 +1,24 @@
 <!DOCTYPE html>
 <html>
 
+{{template "head.html"}}
+
 <body>
-    {{template "nav.html"}}
+    <div id="app">
+        <main>
+            {{template "nav.html"}}
 
-    <h1>Ajouter un membre</h1>
-    <form>
-        <label for="name">
-            Nom
-            <input type="text" id="name" name="name" required>
-        </label>
-
-        <button type="submit">Ajouter</button>
-    </form>
+            <h5>Ajouter un participant</h5>
+            <form>
+                <input type="text" id="name" name="name" placeholder="Prénom..." required>
+                <br /><br />
+                <button class="button has-icon full" type="submit">
+                    <i class="fa-solid fa-check"></i>
+                    <span>Ajouter</span>
+                </button>
+            </form>
+        </main>
+    </div>
 </body>
 
 </html>

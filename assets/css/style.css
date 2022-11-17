@@ -1,0 +1,11 @@
+#app {
+    padding: 2rem;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+#nav a {
+    padding: 1rem 1rem 1rem 0rem;
+    line-height: 2;
+    white-space: nowrap;
+}

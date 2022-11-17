@@ -1,13 +1,19 @@
 <!DOCTYPE html>
 <html>
 
+{{template "head.html"}}
+
 <body>
-    {{template "nav.html"}}
-    <h1>{{.Expense.Title}}</h1>
-    <h2>Total: {{.Expense.FormattedAmount}}</h2>
-    {{range .Expense.SpentBy}}
-    <p>{{.Name}} - {{$.Expense.FormattedAmountPerMember}}</p>
-    {{end}}
+    <div id="app">
+        <main>
+            {{template "nav.html"}}
+            <h1>{{.Expense.Title}}</h1>
+            <h2>Total: {{.Expense.FormattedAmount}}</h2>
+            {{range .Expense.SpentBy}}
+            <p>{{.Name}} - {{$.Expense.FormattedAmountPerMember}}</p>
+            {{end}}
+        </main>
+    </div>
 </body>
 
 </html>

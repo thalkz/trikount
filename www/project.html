@@ -9,24 +9,27 @@
             {{template "nav.html"}}
             <h1>{{.Name}}</h1>
 
-            <button class="has-icon is-outline" onclick="location.href='/{{$.ProjectId}}/members/add'">
-                <i class="fa-solid fa-user-plus"></i>
-                <span>Ajouter un participant</span>
-            </button>
             {{if not .Expenses}}
-                <p>Il n'y a aucunes dépenses pour le moment ! Penses à partager le lien du Trikount pour que les participants puissent ajouter leurs dépenses.</p>
-            {{else}}
+            <p>Il n'y a aucunes dépense pour le moment ! Penses à partager le lien du Trikount pour que les
+                participants puissent ajouter leurs dépenses.</p>
+            {{end}}
+
             <button class="has-icon" onclick="location.href='/{{.ProjectId}}/expenses/add'">
                 <i class="fa-solid fa-plus"></i>
                 <span>Nouvelle dépense</span>
             </button>
+
+            <button class="has-icon is-outline" onclick="location.href='/{{$.ProjectId}}/members/add'">
+                <i class="fa-solid fa-user-plus"></i>
+                <span>Ajouter un participant</span>
+            </button>
+
             {{range .Expenses}}
             <p onclick="location.href='/{{$.ProjectId}}/expenses/{{.Id}}'">{{.Title}} •
                 <b>{{.FormattedAmount}}</b><br />
                 <small>payé par {{.PaidBy.Name}}</small>
             </p>
             <hr />
-            {{end}}
             {{end}}
         </main>
         {{template "footer.html"}}

@@ -4,7 +4,6 @@
         id="nav-settings">paramètres ⚙️</a>
     <script>
         var projectId = window.location.pathname.split("/")[1]
-        console.log(window.location.pathname)
         document.getElementById("nav-expense").href = `/${projectId}`;
         document.getElementById("nav-balance").href = `/${projectId}/balance`;
         document.getElementById("nav-settings").href = `/${projectId}/settings`; 

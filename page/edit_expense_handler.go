@@ -11,25 +11,53 @@ import (
 	"github.com/thalkz/trikount/models"
 )
 
-func AddExpense(c *gin.Context) {
+type editExpensePage struct {
+	IsEdit  bool
+	Members []*models.Member
+	Expense *models.Expense
+}
+
+func EditExpense(c *gin.Context) {
+	expenseIdStr := c.Param("expenseId")
 	projectId := c.Param("projectId")
 	title := c.Query("name")
-	amountStr := c.Query("amount")
-	paidByStr := c.Query("paid_by")
+
+	expenseId, err := strconv.Atoi(expenseIdStr)
+	if err != nil {
+		error_helper.HTML(http.StatusBadRequest, err, c)
+	}
 
 	members, err := database.GetMembers(projectId)
 	if err != nil {
 		error_helper.HTML(http.StatusInternalServerError, err, c)
 	}
 
-	if title == "" || amountStr == "" {
+	if title == "" {
+		expense, err := database.GetExpense(expenseId)
+		if err != nil {
+			error_helper.HTML(http.StatusInternalServerError, err, c)
+		}
+
+		// Order members so that the paidBy member is first in the slice
+		for i, member := range members {
+			if member.Id == expense.PaidBy.Id {
+				tmp := members[0]
+				members[0] = members[i]
+				members[i] = tmp
+			}
+		}
+
 		c.HTML(http.StatusOK, "edit_expense.html", editExpensePage{
-			IsEdit:  false,
-			Expense: &models.Expense{},
+			IsEdit:  true,
+			Expense: expense,
 			Members: members,
 		})
 		return
 	}
+
+	// Edit expense
+	amountStr := c.Query("amount")
+	paidByStr := c.Query("paid_by")
 
 	amount, err := strconv.ParseFloat(amountStr, 32)
 	if err != nil {
@@ -47,7 +75,7 @@ func AddExpense(c *gin.Context) {
 		}
 	}
 
-	err = database.AddExpense(projectId, title, amount, paidBy, spendBy)
+	err = database.EditExpense(projectId, expenseId, title, amount, paidBy, spendBy)
 	if err != nil {
 		error_helper.HTML(http.StatusInternalServerError, err, c)
 		return

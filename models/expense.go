@@ -26,3 +26,12 @@ func (e Expense) FormattedAmountPerMember() string {
 func (e Expense) FormattedAmount() string {
 	return format.ToEuro(e.Amount)
 }
+
+func (e Expense) HasSpent(id int) bool {
+	for _, member := range e.SpentBy {
+		if member.Id == id {
+			return true
+		}
+	}
+	return false
+}

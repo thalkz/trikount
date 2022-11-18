@@ -11,11 +11,13 @@ import (
 )
 
 type expensePage struct {
-	Expense *models.Expense
+	ProjectId string
+	Expense   *models.Expense
 }
 
 func Expense(c *gin.Context) {
 	expenseIdStr := c.Param("expenseId")
+	projectId := c.Param("projectId")
 
 	expenseId, err := strconv.Atoi(expenseIdStr)
 	if err != nil {
@@ -28,6 +30,7 @@ func Expense(c *gin.Context) {
 	}
 
 	c.HTML(http.StatusOK, "expense.html", expensePage{
-		Expense: expense,
+		Expense:   expense,
+		ProjectId: projectId,
 	})
 }

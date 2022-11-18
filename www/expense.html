@@ -12,6 +12,11 @@
             {{range .Expense.SpentBy}}
             <p>{{.Name}} - {{$.Expense.FormattedAmountPerMember}}</p>
             {{end}}
+
+            <button class="has-icon is-outline" onclick="location.href='/{{.ProjectId}}/expenses/{{.Expense.Id}}/edit'">
+                <i class="fa-solid fa-pen"></i>
+                <span>Editer</span>
+            </button>
         </main>
     </div>
 </body>

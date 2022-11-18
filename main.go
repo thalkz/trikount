@@ -26,6 +26,7 @@ func main() {
 	r.GET("/:projectId", page.Project)
 	r.GET("/:projectId/expenses/add", page.AddExpense)
 	r.GET("/:projectId/expenses/:expenseId", page.Expense)
+	r.GET("/:projectId/expenses/:expenseId/edit", page.EditExpense)
 	r.GET("/:projectId/balance", page.Balance)
 	r.GET("/:projectId/members/add", page.AddMember)
 	r.GET("/:projectId/settings", page.Settings)

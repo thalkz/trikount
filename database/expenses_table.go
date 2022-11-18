@@ -29,6 +29,38 @@ func AddExpense(projectId string, title string, amount float64, paidBy int, spen
 	return nil
 }
 
+func EditExpense(projectId string, expenseId int, title string, amount float64, paidBy int, spentBy []int) error {
+	tx, err := db.Begin()
+	if err != nil {
+		return errors.Wrap(err, "failed to begin tx")
+	}
+	defer tx.Rollback()
+
+	_, err = tx.Exec(`UPDATE expenses SET title = ?, amount = ?, paid_by = ? WHERE id = ?`, title, amount, paidBy, expenseId)
+	if err != nil {
+		return errors.Wrap(err, "failed to update expense")
+	}
+
+	_, err = tx.Exec(`DELETE FROM spent_by WHERE expense_id = $1`, expenseId)
+	if err != nil {
+		return errors.Wrap(err, "failed to delete old spent_by")
+	}
+
+	for _, spenderId := range spentBy {
+		_, err = tx.Exec(`INSERT INTO spent_by (expense_id, member_id) values($1, $2)`, expenseId, spenderId)
+		if err != nil {
+			return errors.Wrap(err, "failed to insert spender")
+		}
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		return errors.Wrap(err, "failed to commit tx")
+	}
+
+	return nil
+}
+
 func GetExpenses(projectId string) ([]*models.Expense, error) {
 	rows, err := db.Query(`SELECT expenses.id, title, amount, members.id, members.name
 		FROM expenses 

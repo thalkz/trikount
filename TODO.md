@@ -12,5 +12,6 @@
 - [ ] feat: Share Button
 - [ ] chore: Create Dockerfile
 - [ ] chore: Add unit tests
-- [ ] feat: Create an account with Webauthn ? (webauthn.io)
+- [ ] feat: Create an account with Webauthn (?) (webauthn.io)
 - [ ] fix: Fix missing favicon.ico
+- [ ] feat: Intégration Lydia (?)

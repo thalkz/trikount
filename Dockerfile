@@ -6,7 +6,9 @@ RUN go mod download
 RUN go build -o /main
 
 FROM alpine as runner
-COPY ./www /www
-COPY ./assets /assets
-COPY --from=builder /main /server/main
-ENTRYPOINT ["/server/main"]
+RUN mkdir /home/data
+WORKDIR /home
+COPY ./www ./www
+COPY ./assets ./assets
+COPY --from=builder /main ./main
+ENTRYPOINT ["./main"]

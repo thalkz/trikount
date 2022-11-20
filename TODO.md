@@ -10,7 +10,7 @@
 - [ ] feat: Save visited Trikounts & display on home page
 - [ ] feat: Create a 1-click refund button
 - [ ] feat: Share Button
-- [ ] chore: Create Dockerfile
+- [x] chore: Create Dockerfile & docker compose
 - [ ] chore: Add unit tests
 - [ ] feat: Create an account with Webauthn (?) (webauthn.io)
 - [ ] fix: Fix missing favicon.ico

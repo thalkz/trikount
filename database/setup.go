@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+	"os"
 
 	"github.com/pkg/errors"
 )
@@ -9,7 +10,13 @@ import (
 var db *sql.DB
 
 func Setup() (close func() error, err error) {
-	db, err = sql.Open("sqlite3", "data.db")
+	err = os.Mkdir("data", os.ModePerm)
+	if err != nil && !os.IsExist(err) {
+		errors.Wrap(err, "failed to create folder")
+		return
+	}
+
+	db, err = sql.Open("sqlite3", "data/data.db")
 	if err != nil {
 		errors.Wrap(err, "failed to open database")
 	}

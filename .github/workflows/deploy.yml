@@ -35,4 +35,6 @@ jobs:
           host: trikount.com
           username: ubuntu
           key: ${{ secrets.DEPLOYMENT_SSH_KEY }}
-          script: ./trikount.com/update.sh ${{ steps.tagName.outputs.tag }}
+          script: |
+            cd ./trikount.com
+            ./update.sh ${{ steps.tagName.outputs.tag }}

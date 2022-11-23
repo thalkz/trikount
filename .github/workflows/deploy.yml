@@ -1,0 +1,38 @@
+name: "Deploy"
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build image
+        run: docker build . --tag trikount --label "runnumber=${GITHUB_RUN_ID}"
+
+      - name: Log into ghcr.io
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
+
+      - uses: olegtarasov/get-tag@v2.1
+        id: tagName
+
+      - name: Push image
+        run: |
+          docker tag trikount ghcr.io/thalkz/trikount:${{ steps.tagName.outputs.tag }}
+          docker tag trikount ghcr.io/thalkz/trikount:latest
+          docker push --all-tags ghcr.io/thalkz/trikount
+  
+      - name: Deploy to host
+        uses: appleboy/ssh-action@master
+        with:
+          host: trikount.com
+          username: ubuntu
+          key: ${{ secrets.DEPLOYMENT_SSH_KEY }}
+          script: ./trikount.com/update.sh ${{ steps.tagName.outputs.tag }}

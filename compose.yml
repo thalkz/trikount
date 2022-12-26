@@ -1,0 +1,16 @@
+version: "3.7"
+
+services:
+  app:
+    build: .
+    restart: always
+    ports:
+      - 8080:8080
+    volumes:
+      - data:/home/data
+    environment:
+      - PORT=8080
+      - GIN_MODE=debug
+
+volumes:
+  data:

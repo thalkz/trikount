@@ -7,6 +7,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 
 	"github.com/thalkz/trikount/database"
+	"github.com/thalkz/trikount/middleware"
 	"github.com/thalkz/trikount/page"
 )
 
@@ -25,6 +26,7 @@ func main() {
 	r.GET("/create", page.CreateProject)
 
 	project := r.Group("/t")
+	project.Use(middleware.SetProjectCookie())
 	{
 		project.GET("/:projectId/", page.Project)
 		project.GET("/:projectId/expenses/add", page.AddExpense)

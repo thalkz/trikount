@@ -1,18 +1,38 @@
 # TODO
 
-- [ ] chore: Write a README.md
-- [ ] feat: Add multiple members when creating a new Trikount
-- [ ] feat: Improve UI (mobile & desktop)
-- [ ] feat: Delete a Trikount (settings)
+## Milestone A - MVP
+
 - [x] feat: Edit an expense
-- [ ] feat: Display total spend by project
-- [ ] feat: Mark some expenses as transfers
-- [ ] feat: Save visited Trikounts & display on home page
-- [ ] feat: Create a 1-click refund button
-- [ ] feat: Share Button
 - [x] chore: Create Dockerfile & docker compose
-- [ ] chore: Add unit tests
-- [ ] feat: Create an account with Webauthn (?) (webauthn.io)
+- [x] chore: Implement CD with Github Actions
+
+## Milestone B - Creation & Sharing
+
+- [ ] feat: Save visited Trikounts & display on home page (using cookies)
+- [ ] feat: Force user to copy link when creating the Trikount
+- [ ] feat: Add multiple members when creating a new Trikount
+- [ ] feat: Delete a Trikount (settings)
+- [ ] feat: Share link button
+
+## Milestone C - Total & Refunds
+
+- [ ] feat: Display total spend by project
+- [ ] feat: Mark some expenses as refunds
+- [ ] feat: Create a 1-click refund button
+
+## Milestone D - Admin Dashboard
+
+- [ ] feat: Admin script for listing projects and members
+
+## Milestone E - Improved UI
+
 - [ ] fix: Fix missing favicon.ico
-- [ ] feat: Intégration Lydia (?)
-- [ ] feat: Validate user input
+- [ ] feat: Improve UI (mobile & desktop)
+
+## Backlog
+
+- [ ] chore: Add unit tests
+- [ ] chore: Write a README.md
+- [ ] feat: Validate user input (project, expense, member)
+- [ ] feat: Intégration Lydia
+- [ ] feat: Create an account with Webauthn (webauthn.io)

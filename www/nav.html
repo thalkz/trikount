@@ -3,10 +3,10 @@
     <a id="nav-expense">dépenses 💸</a><a id="nav-balance">équilibres ⚖️</a>  <a
         id="nav-settings">paramètres ⚙️</a>
     <script>
-        var projectId = window.location.pathname.split("/")[1]
-        document.getElementById("nav-expense").href = `/${projectId}`;
-        document.getElementById("nav-balance").href = `/${projectId}/balance`;
-        document.getElementById("nav-settings").href = `/${projectId}/settings`; 
+        var projectId = window.location.pathname.split("/")[2]
+        document.getElementById("nav-expense").href = `/t/${projectId}`;
+        document.getElementById("nav-balance").href = `/t/${projectId}/balance`;
+        document.getElementById("nav-settings").href = `/t/${projectId}/settings`; 
     </script>
 </div>
 <br/>

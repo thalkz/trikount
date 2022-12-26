@@ -23,13 +23,17 @@ func main() {
 
 	r.GET("/", page.Home)
 	r.GET("/create", page.CreateProject)
-	r.GET("/:projectId", page.Project)
-	r.GET("/:projectId/expenses/add", page.AddExpense)
-	r.GET("/:projectId/expenses/:expenseId", page.Expense)
-	r.GET("/:projectId/expenses/:expenseId/edit", page.EditExpense)
-	r.GET("/:projectId/balance", page.Balance)
-	r.GET("/:projectId/members/add", page.AddMember)
-	r.GET("/:projectId/settings", page.Settings)
+
+	project := r.Group("/t")
+	{
+		project.GET("/:projectId/", page.Project)
+		project.GET("/:projectId/expenses/add", page.AddExpense)
+		project.GET("/:projectId/expenses/:expenseId", page.Expense)
+		project.GET("/:projectId/expenses/:expenseId/edit", page.EditExpense)
+		project.GET("/:projectId/balance", page.Balance)
+		project.GET("/:projectId/members/add", page.AddMember)
+		project.GET("/:projectId/settings", page.Settings)
+	}
 
 	r.Run()
 }

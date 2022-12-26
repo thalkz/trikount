@@ -81,5 +81,5 @@ func EditExpense(c *gin.Context) {
 		return
 	}
 
-	c.Redirect(http.StatusFound, fmt.Sprintf("/%s", projectId))
+	c.Redirect(http.StatusFound, fmt.Sprintf("/t/%s", projectId))
 }

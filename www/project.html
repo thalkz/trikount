@@ -14,18 +14,18 @@
                 participants puissent ajouter leurs dépenses.</p>
             {{end}}
 
-            <button class="has-icon" onclick="location.href='/{{.ProjectId}}/expenses/add'">
+            <button class="has-icon" onclick="location.href='/t/{{.ProjectId}}/expenses/add'">
                 <i class="fa-solid fa-plus"></i>
                 <span>Nouvelle dépense</span>
             </button>
 
-            <button class="has-icon is-outline" onclick="location.href='/{{$.ProjectId}}/members/add'">
+            <button class="has-icon is-outline" onclick="location.href='/t/{{$.ProjectId}}/members/add'">
                 <i class="fa-solid fa-user-plus"></i>
                 <span>Ajouter un participant</span>
             </button>
 
             {{range .Expenses}}
-            <p onclick="location.href='/{{$.ProjectId}}/expenses/{{.Id}}'">{{.Title}} •
+            <p onclick="location.href='/t/{{$.ProjectId}}/expenses/{{.Id}}'">{{.Title}} •
                 <b>{{.FormattedAmount}}</b><br />
                 <small>payé par {{.PaidBy.Name}}</small>
             </p>

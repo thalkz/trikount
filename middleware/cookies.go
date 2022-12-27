@@ -28,6 +28,7 @@ func SetProjectCookie() gin.HandlerFunc {
 			cleaned = append(cleaned, id)
 		}
 		cookie = strings.Join(cleaned, ",")
+		log.Printf("DEBUG: setting cookie project_ids=%v", cookie)
 		c.SetCookie("project_ids", cookie, cookieExpireSeconds, "/", "", false, true)
 	}
 }

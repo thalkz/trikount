@@ -2,6 +2,8 @@ package database
 
 import (
 	"database/sql"
+	"fmt"
+	"strings"
 	"time"
 
 	"github.com/pkg/errors"
@@ -40,4 +42,35 @@ func GetProject(id string) (*models.Project, error) {
 	}
 
 	return &project, nil
+}
+
+type SqlStringArray struct {
+	V []string
+}
+
+func GetProjects(ids []string) ([]*models.Project, error) {
+	arr := fmt.Sprintf("('%v')", strings.Join(ids, "','"))
+	stmt := fmt.Sprintf(`SELECT id, name, created_at FROM projects WHERE id IN %v`, arr)
+	// TODO This is probably vulnerable to SQL injection. Find a more secure way of encoding the array
+	rows, err := db.Query(stmt)
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to scan projects")
+	}
+
+	projects := make([]*models.Project, 0)
+	for rows.Next() {
+		var project models.Project
+		var createdAtStr string
+		err := rows.Scan(&project.Id, &project.Name, &createdAtStr)
+		if err != nil {
+			return nil, errors.Wrap(err, "failed to get project")
+		}
+		project.CreatedAt, err = time.Parse(time.UnixDate, createdAtStr)
+		if err != nil {
+			return nil, errors.Wrap(err, "failed to parse time")
+		}
+		projects = append(projects, &project)
+	}
+
+	return projects, nil
 }

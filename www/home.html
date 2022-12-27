@@ -7,6 +7,13 @@
     <div id="app">
         <main>
             <h1>Trikount</h1>
+            {{range .Projects}}
+            <button class="has-icon" onclick="location.href='/t/{{.Id}}'">
+                <i class="fa-solid fa-plus"></i>
+                <span>{{.Name}}</span>
+            </button>
+            <br/>
+            {{end}}
             <p>Pour créer un nouveau Trikount, ça se passe par ici:</p>
             <button onclick="location.href='/create'">Créer un Trikount</button>
             <br /><br />
@@ -15,7 +22,8 @@
             </p>
             <p>Le lien doit ressembler à celui ci : <code>trikount.com/t/XXXXXX</code></p>
             <h5>Comment ça fonctionne ?</h5>
-            Trikount permet de facilement partager des dépenses entre amis. Pour un voyage, une coloc, un projet etc. puis donne des instructions pour faciliter le remboursement.
+            Trikount permet de facilement partager des dépenses entre amis. Pour un voyage, une coloc, un projet etc.
+            puis donne des instructions pour faciliter le remboursement.
             <br /><br />
             <h5>Combien ça coute ? Il y a des pubs ?</h5>
             Trikount est 100% gratuit et sans pubs, tout simplement.

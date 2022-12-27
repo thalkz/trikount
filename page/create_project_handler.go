@@ -12,25 +12,27 @@ import (
 	"github.com/thalkz/trikount/hash"
 )
 
-func CreateProject(c *gin.Context) {
-	projectName := c.Query("name")
+func CreateProject() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		projectName := c.Query("name")
 
-	if projectName == "" {
-		c.HTML(http.StatusOK, "create_project.html", nil)
-	} else {
-		projectId, err := findAvailableProjectId()
-		if err != nil {
-			error_helper.HTML(http.StatusInternalServerError, err, c)
-			return
+		if projectName == "" {
+			c.HTML(http.StatusOK, "create_project.html", nil)
+		} else {
+			projectId, err := findAvailableProjectId()
+			if err != nil {
+				error_helper.HTML(http.StatusInternalServerError, err, c)
+				return
+			}
+
+			err = database.CreateProject(projectId, projectName, time.Now())
+			if err != nil {
+				error_helper.HTML(http.StatusInternalServerError, err, c)
+				return
+			}
+
+			c.Redirect(http.StatusFound, fmt.Sprintf("/t/%s", projectId))
 		}
-
-		err = database.CreateProject(projectId, projectName, time.Now())
-		if err != nil {
-			error_helper.HTML(http.StatusInternalServerError, err, c)
-			return
-		}
-
-		c.Redirect(http.StatusFound, fmt.Sprintf("/t/%s", projectId))
 	}
 }
 

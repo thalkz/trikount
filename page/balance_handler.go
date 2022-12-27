@@ -9,24 +9,26 @@ import (
 	"github.com/thalkz/trikount/models"
 )
 
-type balancePage struct {
-	Balance   []*models.MemberBalance
-	Transfers []*models.Transfer
-}
-
-func Balance(c *gin.Context) {
-	projectId := c.Param("projectId")
-
-	balance, err := database.GetBalance(projectId)
-	if err != nil {
-		error_helper.HTML(http.StatusInternalServerError, err, c)
-		return
+func Balance() gin.HandlerFunc {
+	type page struct {
+		Balance   []*models.MemberBalance
+		Transfers []*models.Transfer
 	}
 
-	transfers := balance.GetTransfers()
+	return func(c *gin.Context) {
+		projectId := c.Param("projectId")
 
-	c.HTML(http.StatusOK, "balance.html", balancePage{
-		Balance:   balance.Members,
-		Transfers: transfers,
-	})
+		balance, err := database.GetBalance(projectId)
+		if err != nil {
+			error_helper.HTML(http.StatusInternalServerError, err, c)
+			return
+		}
+
+		transfers := balance.GetTransfers()
+
+		c.HTML(http.StatusOK, "balance.html", page{
+			Balance:   balance.Members,
+			Transfers: transfers,
+		})
+	}
 }

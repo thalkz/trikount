@@ -10,27 +10,29 @@ import (
 	"github.com/thalkz/trikount/models"
 )
 
-type expensePage struct {
-	ProjectId string
-	Expense   *models.Expense
-}
-
-func Expense(c *gin.Context) {
-	expenseIdStr := c.Param("expenseId")
-	projectId := c.Param("projectId")
-
-	expenseId, err := strconv.Atoi(expenseIdStr)
-	if err != nil {
-		error_helper.HTML(http.StatusBadRequest, err, c)
+func Expense() gin.HandlerFunc {
+	type page struct {
+		ProjectId string
+		Expense   *models.Expense
 	}
 
-	expense, err := database.GetExpense(expenseId)
-	if err != nil {
-		error_helper.HTML(http.StatusInternalServerError, err, c)
-	}
+	return func(c *gin.Context) {
+		expenseIdStr := c.Param("expenseId")
+		projectId := c.Param("projectId")
 
-	c.HTML(http.StatusOK, "expense.html", expensePage{
-		Expense:   expense,
-		ProjectId: projectId,
-	})
+		expenseId, err := strconv.Atoi(expenseIdStr)
+		if err != nil {
+			error_helper.HTML(http.StatusBadRequest, err, c)
+		}
+
+		expense, err := database.GetExpense(expenseId)
+		if err != nil {
+			error_helper.HTML(http.StatusInternalServerError, err, c)
+		}
+
+		c.HTML(http.StatusOK, "expense.html", page{
+			Expense:   expense,
+			ProjectId: projectId,
+		})
+	}
 }

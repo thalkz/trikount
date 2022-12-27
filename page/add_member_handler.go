@@ -9,20 +9,23 @@ import (
 	"github.com/thalkz/trikount/error_helper"
 )
 
-func AddMember(c *gin.Context) {
-	projectId := c.Param("projectId")
-	memberName := c.Query("name")
+func AddMember() gin.HandlerFunc {
+	return func(c *gin.Context) {
 
-	if memberName == "" {
-		c.HTML(http.StatusOK, "add_member.html", nil)
-		return
+		projectId := c.Param("projectId")
+		memberName := c.Query("name")
+
+		if memberName == "" {
+			c.HTML(http.StatusOK, "add_member.html", nil)
+			return
+		}
+
+		err := database.AddMember(projectId, memberName)
+		if err != nil {
+			error_helper.HTML(http.StatusInternalServerError, err, c)
+			return
+		}
+
+		c.Redirect(http.StatusFound, fmt.Sprintf("/t/%s", projectId))
 	}
-
-	err := database.AddMember(projectId, memberName)
-	if err != nil {
-		error_helper.HTML(http.StatusInternalServerError, err, c)
-		return
-	}
-
-	c.Redirect(http.StatusFound, fmt.Sprintf("/t/%s", projectId))
 }

@@ -1,12 +1,19 @@
-<div id="nav">
-    <h1>Trikount</h1>
-    <a id="nav-expense">dépenses 💸</a><a id="nav-balance">équilibres ⚖️</a>  <a
-        id="nav-settings">paramètres ⚙️</a>
+<ul id="nav" class="navbar-list">
+    <li class="navbar-item" class="navbar-item">
+        <a href="/">Trikount.com</a>
+    </li>
+    <li class="navbar-item">
+        <a id="nav-expense" class="navbar-item">[ dépenses ]</a>
+    </li>
+    <a id="nav-balance">[ équilibres ]</a>
+    <a id="nav-settings">[ paramètres ]</a>
+
+
     <script>
         var projectId = window.location.pathname.split("/")[2]
         document.getElementById("nav-expense").href = `/t/${projectId}`;
         document.getElementById("nav-balance").href = `/t/${projectId}/balance`;
         document.getElementById("nav-settings").href = `/t/${projectId}/settings`; 
     </script>
-</div>
-<br/>
+</ul>
+<br />

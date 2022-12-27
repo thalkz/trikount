@@ -4,7 +4,7 @@
 {{template "head.html"}}
 
 <body>
-    <div id="app">
+    <div class="container">
         <main>
             {{template "nav.html"}}
             <h1>{{.Name}}</h1>
@@ -14,14 +14,12 @@
                 participants puissent ajouter leurs dépenses.</p>
             {{end}}
 
-            <button class="has-icon" onclick="location.href='/t/{{.ProjectId}}/expenses/add'">
-                <i class="fa-solid fa-plus"></i>
-                <span>Nouvelle dépense</span>
+            <button class="button-primary" onclick="location.href='/t/{{.ProjectId}}/expenses/add'">
+                Nouvelle dépense
             </button>
 
-            <button class="has-icon is-outline" onclick="location.href='/t/{{$.ProjectId}}/members/add'">
-                <i class="fa-solid fa-user-plus"></i>
-                <span>Ajouter un participant</span>
+            <button onclick="location.href='/t/{{$.ProjectId}}/members/add'">
+                Ajouter un participant
             </button>
 
             {{range .Expenses}}

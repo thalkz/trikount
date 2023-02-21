@@ -19,7 +19,7 @@ func Home() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		projectIds := []string{}
 		projectIdsStr, err := c.Cookie("project_ids")
-		if err != nil {
+		if err == nil {
 			projectIds = strings.Split(projectIdsStr, ",")
 		}
 
@@ -29,8 +29,7 @@ func Home() gin.HandlerFunc {
 			return
 		}
 
-		log.Printf("DEBUG: projectIds: %v", projectIds)
-		log.Printf("DEBUG: projects: %v", projects)
+		log.Printf("DEBUG: Current projectIds: %v", projectIds)
 
 		c.HTML(http.StatusOK, "home.html", page{
 			Projects: projects,

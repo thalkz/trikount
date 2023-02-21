@@ -18,6 +18,14 @@ func CreateProject(id, name string, createdAt time.Time) error {
 	return nil
 }
 
+func DeleteProject(id string) error {
+	_, err := db.Exec(`DELETE FROM projects WHERE id = $1`, id)
+	if err != nil {
+		return errors.Wrap(err, "failed to delete project")
+	}
+	return nil
+}
+
 func CheckExists(id string) (bool, error) {
 	err := db.QueryRow(`SELECT id FROM projects WHERE id = $1`, id).Scan()
 	if err == sql.ErrNoRows {

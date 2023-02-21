@@ -32,3 +32,8 @@
     background-color: azure;
     padding: 20px;
 }
+
+.danger-button {
+    border-color: red;
+    color: red;
+}

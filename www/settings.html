@@ -7,8 +7,10 @@
     <div class="container">
         <main>
             {{template "nav.html"}}
-            <h1>Settings</h1>
-            <p>TODO</p>
+            <h1>Paramètres</h1>
+            <form onsubmit="return confirm('Êtes-vous sur de vouloir supprimer définitivement {{.Project.Name}} ?');">
+                <button class="danger-button" type="submit" name="delete" value="true">Supprimer ce Trikount</button>
+            </form>
         </main>
     </div>
 </body>

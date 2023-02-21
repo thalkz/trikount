@@ -9,7 +9,7 @@
             {{template "nav.html"}}
 
             <h1>Balance</h1>
-            <h5>Total Spent: {{.TotalSpent}}</h5>
+            <h5>Total dépensé: {{.TotalSpent}}</h5>
 
             <ul>
                 {{range .Balance}}
@@ -28,7 +28,7 @@
                 {{range .Transfers}}
                 <p>
                     {{.From.Name}} doit <b>{{.FormattedAmount}}</b> à {{.To.Name}}
-                    (<a>rembourser</a>)
+                    (<a href="/t/{{$.ProjectId}}/expenses/add?name=Remboursement&amount={{.Amount}}&paid_by={{.From.Id}}&{{.To.Id}}=on&is_transfer=on">rembourser</a>)
                 </p>
                 {{end}}
             </fieldset>

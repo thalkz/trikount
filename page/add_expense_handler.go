@@ -20,32 +20,19 @@ func AddExpense() gin.HandlerFunc {
 
 	return func(c *gin.Context) {
 		projectId := c.Param("projectId")
+
+		save := c.Query("save")
 		title := c.Query("name")
 		amountStr := c.Query("amount")
 		paidByStr := c.Query("paid_by")
 		isTransferStr := c.Query("is_transfer")
 
+		amount, _ := strconv.ParseFloat(amountStr, 32)
+		paidBy, _ := strconv.Atoi(paidByStr)
 		members, err := database.GetMembers(projectId)
 		if err != nil {
 			error_helper.HTML(http.StatusInternalServerError, err, c)
-		}
-
-		if title == "" || amountStr == "" {
-			c.HTML(http.StatusOK, "edit_expense.html", page{
-				IsEdit:  false,
-				Expense: &models.Expense{},
-				Members: members,
-			})
 			return
-		}
-
-		amount, err := strconv.ParseFloat(amountStr, 32)
-		if err != nil {
-			error_helper.HTML(http.StatusInternalServerError, err, c)
-		}
-		paidBy, err := strconv.Atoi(paidByStr)
-		if err != nil {
-			error_helper.HTML(http.StatusInternalServerError, err, c)
 		}
 
 		var spendBy []int
@@ -57,12 +44,39 @@ func AddExpense() gin.HandlerFunc {
 
 		isTransfer := isTransferStr == "on"
 
-		err = database.AddExpense(projectId, title, amount, paidBy, spendBy, isTransfer)
-		if err != nil {
-			error_helper.HTML(http.StatusInternalServerError, err, c)
-			return
-		}
+		if save != "on" {
+			var paidByMember models.Member
+			var spendByMembers []models.Member
+			for _, member := range members {
+				if member.Id == paidBy {
+					paidByMember = *member
+				}
+				for _, id := range spendBy {
+					if member.Id == id {
+						spendByMembers = append(spendByMembers, *member)
+					}
+				}
+			}
 
-		c.Redirect(http.StatusFound, fmt.Sprintf("/t/%s", projectId))
+			c.HTML(http.StatusOK, "edit_expense.html", page{
+				IsEdit: false,
+				Expense: &models.Expense{
+					Title:      title,
+					Amount:     amount,
+					PaidBy:     paidByMember,
+					SpentBy:    spendByMembers,
+					IsTransfer: isTransfer,
+				},
+				Members: members,
+			})
+			return
+		} else {
+			err = database.AddExpense(projectId, title, amount, paidBy, spendBy, isTransfer)
+			if err != nil {
+				error_helper.HTML(http.StatusInternalServerError, err, c)
+				return
+			}
+			c.Redirect(http.StatusFound, fmt.Sprintf("/t/%s", projectId))
+		}
 	}
 }

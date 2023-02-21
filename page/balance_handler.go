@@ -12,6 +12,7 @@ import (
 
 func Balance() gin.HandlerFunc {
 	type page struct {
+		ProjectId  string
 		Balance    []*models.MemberBalance
 		TotalSpent string
 		Transfers  []*models.Transfer
@@ -33,6 +34,7 @@ func Balance() gin.HandlerFunc {
 		}
 
 		c.HTML(http.StatusOK, "balance.html", page{
+			ProjectId:  projectId,
 			Transfers:  balance.GetTransfers(),
 			TotalSpent: format.ToEuro(totalSpent),
 			Balance:    balance.Members,

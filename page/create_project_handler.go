@@ -31,7 +31,7 @@ func CreateProject() gin.HandlerFunc {
 				return
 			}
 
-			c.Redirect(http.StatusFound, fmt.Sprintf("/t/%s", projectId))
+			c.Redirect(http.StatusFound, fmt.Sprintf("/t/%s/members/add", projectId))
 		}
 	}
 }

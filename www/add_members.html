@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+{{template "head.html"}}
+
+<body>
+    <div class="container">
+        <main>
+            {{template "nav.html"}}
+
+            <h5>Ajouter un participant</h5>
+            <form>
+                <br />
+                <div id="member-inputs">
+                    <input type="text" id="name" name="name" placeholder="Prénom..." required>
+                </div>
+                <button id="plus-one" type="button">+</button> <button id="minus-one" type="button">-</button>
+                <br />
+                <button type="submit" class="button-primary"><span>Confimer</span></button>
+            </form>
+        </main>
+    </div>
+</body>
+
+<script>
+    let form = document.getElementById("member-inputs");
+    let plusOne = document.getElementById("plus-one");
+    plusOne.onclick = function () {
+        let inputNode = document.createElement('input');
+        inputNode.setAttribute('type', 'text');
+        inputNode.setAttribute('name', 'name');
+        inputNode.setAttribute('placeholder', 'Prénom...');
+        inputNode.required = true;
+        form.appendChild(document.createElement('br'));
+        form.appendChild(inputNode);
+    }
+
+    let minusOne = document.getElementById("minus-one");
+    minusOne.onclick = function () {
+        if (form.children.length > 2) {
+            form.lastChild.remove()
+            form.lastChild.remove()
+        }
+    }
+
+</script>
+
+</html>

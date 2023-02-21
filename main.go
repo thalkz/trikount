@@ -33,7 +33,7 @@ func main() {
 		project.GET("/:projectId/expenses/:expenseId", page.Expense())
 		project.GET("/:projectId/expenses/:expenseId/edit", page.EditExpense())
 		project.GET("/:projectId/balance", page.Balance())
-		project.GET("/:projectId/members/add", page.AddMember())
+		project.GET("/:projectId/members/add", page.AddMembers())
 		project.GET("/:projectId/settings", page.Settings())
 	}
 

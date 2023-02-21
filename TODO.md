@@ -11,8 +11,7 @@
 - [x] feat: Save visited Trikounts & display on home page (using cookies)
 - [x] feat: Force user to copy link when creating the Trikount
 - [x] feat: Add multiple members when creating a new Trikount
-- [ ] feat: Delete a Trikount (settings)
-- [ ] feat: Share link button
+- [x] feat: Delete a Trikount (settings)
 
 ## Milestone C - Total & Refunds
 

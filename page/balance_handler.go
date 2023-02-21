@@ -11,8 +11,9 @@ import (
 
 func Balance() gin.HandlerFunc {
 	type page struct {
-		Balance   []*models.MemberBalance
-		Transfers []*models.Transfer
+		Balance    []*models.MemberBalance
+		TotalSpent string
+		Transfers  []*models.Transfer
 	}
 
 	return func(c *gin.Context) {
@@ -24,11 +25,10 @@ func Balance() gin.HandlerFunc {
 			return
 		}
 
-		transfers := balance.GetTransfers()
-
 		c.HTML(http.StatusOK, "balance.html", page{
-			Balance:   balance.Members,
-			Transfers: transfers,
+			Transfers:  balance.GetTransfers(),
+			TotalSpent: balance.FormattedTotalSpent(),
+			Balance:    balance.Members,
 		})
 	}
 }

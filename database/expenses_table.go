@@ -87,6 +87,16 @@ func GetExpenses(projectId string) ([]*models.Expense, error) {
 	return expenses, nil
 }
 
+func GetTotalSpent(projectId string) (float64, error) {
+	row := db.QueryRow(`SELECT SUM(amount) AS total FROM expenses WHERE project_id = $1`, projectId)
+	var total float64
+	err := row.Scan(&total)
+	if err != nil {
+		return 0.0, errors.Wrap(err, "failed to scan total expense")
+	}
+	return total, nil
+}
+
 func GetExpense(id int) (*models.Expense, error) {
 	row := db.QueryRow(`SELECT expenses.id, expenses.title, expenses.amount, members.id, members.name
 		FROM expenses 

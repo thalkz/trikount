@@ -9,6 +9,8 @@
             {{template "nav.html"}}
 
             <h1>Balance</h1>
+            <h5>Total Spent: {{.TotalSpent}}</h5>
+
             <ul>
                 {{range .Balance}}
                 {{if eq .Balance 0.0}}

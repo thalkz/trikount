@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/thalkz/trikount/database"
 	"github.com/thalkz/trikount/error_helper"
+	"github.com/thalkz/trikount/format"
 	"github.com/thalkz/trikount/models"
 )
 
@@ -25,9 +26,15 @@ func Balance() gin.HandlerFunc {
 			return
 		}
 
+		totalSpent, err := database.GetTotalSpent(projectId)
+		if err != nil {
+			error_helper.HTML(http.StatusInternalServerError, err, c)
+			return
+		}
+
 		c.HTML(http.StatusOK, "balance.html", page{
 			Transfers:  balance.GetTransfers(),
-			TotalSpent: balance.FormattedTotalSpent(),
+			TotalSpent: format.ToEuro(totalSpent),
 			Balance:    balance.Members,
 		})
 	}

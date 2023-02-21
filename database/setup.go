@@ -49,6 +49,7 @@ func Setup() (close func() error, err error) {
 		title text NOT NULL,
 		amount real NOT NULL,
 		paid_by integer,
+		is_transfer bool NOT NULL,
 		FOREIGN KEY (project_id) REFERENCES projects(id),
 		FOREIGN KEY (paid_by) REFERENCES members(id)
 	)`)

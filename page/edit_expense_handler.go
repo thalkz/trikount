@@ -22,6 +22,7 @@ func EditExpense() gin.HandlerFunc {
 		expenseIdStr := c.Param("expenseId")
 		projectId := c.Param("projectId")
 		title := c.Query("name")
+		isTransferStr := c.Query("isTransfer")
 
 		expenseId, err := strconv.Atoi(expenseIdStr)
 		if err != nil {
@@ -76,7 +77,9 @@ func EditExpense() gin.HandlerFunc {
 			}
 		}
 
-		err = database.EditExpense(projectId, expenseId, title, amount, paidBy, spendBy)
+		isTransfer := isTransferStr == "on"
+
+		err = database.EditExpense(projectId, expenseId, title, amount, paidBy, spendBy, isTransfer)
 		if err != nil {
 			error_helper.HTML(http.StatusInternalServerError, err, c)
 			return

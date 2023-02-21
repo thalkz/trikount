@@ -5,9 +5,9 @@ import (
 	"github.com/thalkz/trikount/models"
 )
 
-func AddExpense(projectId string, title string, amount float64, paidBy int, spendBy []int) error {
-	row := db.QueryRow(`INSERT INTO expenses (title, amount, project_id, paid_by) 
-		values($1, $2, $3, $4) RETURNING id`, title, amount, projectId, paidBy)
+func AddExpense(projectId string, title string, amount float64, paidBy int, spendBy []int, isTransfer bool) error {
+	row := db.QueryRow(`INSERT INTO expenses (title, amount, project_id, paid_by, is_transfer)
+		values($1, $2, $3, $4, $5) RETURNING id`, title, amount, projectId, paidBy, isTransfer)
 	var expenseId int
 	err := row.Scan(&expenseId)
 	if err != nil {
@@ -29,14 +29,15 @@ func AddExpense(projectId string, title string, amount float64, paidBy int, spen
 	return nil
 }
 
-func EditExpense(projectId string, expenseId int, title string, amount float64, paidBy int, spentBy []int) error {
+func EditExpense(projectId string, expenseId int, title string, amount float64, paidBy int, spentBy []int, isTransfer bool) error {
 	tx, err := db.Begin()
 	if err != nil {
 		return errors.Wrap(err, "failed to begin tx")
 	}
 	defer tx.Rollback()
 
-	_, err = tx.Exec(`UPDATE expenses SET title = ?, amount = ?, paid_by = ? WHERE id = ?`, title, amount, paidBy, expenseId)
+	_, err = tx.Exec(`UPDATE expenses SET title = ?, amount = ?, paid_by = ?, is_transfer = ? WHERE id = ?`,
+		title, amount, paidBy, isTransfer, expenseId)
 	if err != nil {
 		return errors.Wrap(err, "failed to update expense")
 	}
@@ -62,7 +63,7 @@ func EditExpense(projectId string, expenseId int, title string, amount float64, 
 }
 
 func GetExpenses(projectId string) ([]*models.Expense, error) {
-	rows, err := db.Query(`SELECT expenses.id, title, amount, members.id, members.name
+	rows, err := db.Query(`SELECT expenses.id, title, amount, members.id, members.name, is_transfer
 		FROM expenses 
 		JOIN members ON expenses.paid_by = members.id
 		WHERE expenses.project_id = $1`, projectId)
@@ -73,7 +74,7 @@ func GetExpenses(projectId string) ([]*models.Expense, error) {
 	var expenses []*models.Expense
 	for rows.Next() {
 		var expense models.Expense
-		err := rows.Scan(&expense.Id, &expense.Title, &expense.Amount, &expense.PaidBy.Id, &expense.PaidBy.Name)
+		err := rows.Scan(&expense.Id, &expense.Title, &expense.Amount, &expense.PaidBy.Id, &expense.PaidBy.Name, &expense.IsTransfer)
 		if err != nil {
 			return nil, errors.Wrap(err, "failed to scan expense row")
 		}
@@ -88,7 +89,7 @@ func GetExpenses(projectId string) ([]*models.Expense, error) {
 }
 
 func GetTotalSpent(projectId string) (float64, error) {
-	row := db.QueryRow(`SELECT SUM(amount) AS total FROM expenses WHERE project_id = $1`, projectId)
+	row := db.QueryRow(`SELECT COALESCE(SUM(amount), 0.0) AS total FROM expenses WHERE project_id = $1 AND is_transfer = FALSE`, projectId)
 	var total float64
 	err := row.Scan(&total)
 	if err != nil {
@@ -98,13 +99,13 @@ func GetTotalSpent(projectId string) (float64, error) {
 }
 
 func GetExpense(id int) (*models.Expense, error) {
-	row := db.QueryRow(`SELECT expenses.id, expenses.title, expenses.amount, members.id, members.name
+	row := db.QueryRow(`SELECT expenses.id, expenses.title, expenses.amount, members.id, members.name, expenses.is_transfer
 		FROM expenses 
 		JOIN members ON expenses.paid_by = members.id
 		WHERE expenses.id = $1`, id)
 
 	var expense models.Expense
-	err := row.Scan(&expense.Id, &expense.Title, &expense.Amount, &expense.PaidBy.Id, &expense.PaidBy.Name)
+	err := row.Scan(&expense.Id, &expense.Title, &expense.Amount, &expense.PaidBy.Id, &expense.PaidBy.Name, &expense.IsTransfer)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to scan expense")
 	}

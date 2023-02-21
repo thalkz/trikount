@@ -7,12 +7,13 @@ import (
 )
 
 type Expense struct {
-	Id        int
-	Title     string
-	Amount    float64
-	PaidBy    Member
-	SpentBy   []Member
-	UpdatedAt time.Time
+	Id         int
+	Title      string
+	Amount     float64
+	PaidBy     Member
+	SpentBy    []Member
+	UpdatedAt  time.Time
+	IsTransfer bool
 }
 
 func (e Expense) AmountPerMember() float64 {

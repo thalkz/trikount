@@ -15,8 +15,11 @@
             {{end}}
             <form>
                 <input type="text" id="name" name="name" placeholder="Titre" value="{{.Expense.Title}}" required>
-                <input type="number"  min="0" step="0.01" id="amount" name="amount" value="{{.Expense.Amount}}" required>
-                <br /><br />
+                <input type="number" min="0" step="0.01" id="amount" name="amount" value="{{.Expense.Amount}}" required>
+                <br />
+                <input type="checkbox" id="isTransfer" name="isTransfer" {{if $.Expense.IsTransfer}}checked{{end}}>
+                <label for="isTransfer">Ceci est un remboursement</label>
+                <br />
                 <label for="cars">Payé par</label>
                 <select name="paid_by" id="paid_by">
                     {{if not $.IsEdit}}
@@ -26,7 +29,7 @@
                     <option value="{{.Id}}">{{.Name}}</option>
                     {{end}}
                 </select>
-                <br /><br />
+                <br />
 
                 <label>Pour</label>
                 {{range .Members}}

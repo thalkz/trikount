@@ -15,8 +15,8 @@
 
 ## Milestone C - Total & Refunds
 
-- [ ] feat: Display total spend by project
-- [ ] feat: Mark some expenses as refunds
+- [x] feat: Display total spend by project
+- [x] feat: Mark some expenses as refunds
 - [ ] feat: Create a 1-click refund button
 
 ## Milestone D - Admin Dashboard

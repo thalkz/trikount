@@ -37,3 +37,7 @@
     border-color: red;
     color: red;
 }
+
+label {
+    display: inline;
+}

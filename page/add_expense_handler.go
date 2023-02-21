@@ -23,6 +23,7 @@ func AddExpense() gin.HandlerFunc {
 		title := c.Query("name")
 		amountStr := c.Query("amount")
 		paidByStr := c.Query("paid_by")
+		isTransferStr := c.Query("is_transfer")
 
 		members, err := database.GetMembers(projectId)
 		if err != nil {
@@ -54,7 +55,9 @@ func AddExpense() gin.HandlerFunc {
 			}
 		}
 
-		err = database.AddExpense(projectId, title, amount, paidBy, spendBy)
+		isTransfer := isTransferStr == "on"
+
+		err = database.AddExpense(projectId, title, amount, paidBy, spendBy, isTransfer)
 		if err != nil {
 			error_helper.HTML(http.StatusInternalServerError, err, c)
 			return

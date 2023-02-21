@@ -2,24 +2,10 @@ package models
 
 import (
 	"math"
-
-	"github.com/thalkz/trikount/format"
 )
 
 type Balance struct {
 	Members []*MemberBalance
-}
-
-func (b Balance) TotalSpent() float64 {
-	var total float64
-	for _, member := range b.Members {
-		total += member.Spent
-	}
-	return total
-}
-
-func (b Balance) FormattedTotalSpent() string {
-	return format.ToEuro(b.TotalSpent())
 }
 
 func (b Balance) GetTransfers() []*Transfer {

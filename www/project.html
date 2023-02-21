@@ -20,7 +20,8 @@
                     document.getElementById("share-link").innerHTML = `trikount.com/t/${projectId}`;
                 </script>
                 <p>Si le lien est perdu, tu peux toujours retrouver ton trikount en te rendant sur
-                    <code>trikount.com</code></p>
+                    <code>trikount.com</code>
+                </p>
                 <button onclick="location.href='?show_tutorial=false'">
                     C'est fait !
                 </button>
@@ -41,9 +42,16 @@
                 Ajouter un participant
             </button>
 
+            <br /><br />
             {{range .Expenses}}
-            <p onclick="location.href='/t/{{$.ProjectId}}/expenses/{{.Id}}'">{{.Title}} •
-                <b>{{.FormattedAmount}}</b><br />
+            <p onclick="location.href='/t/{{$.ProjectId}}/expenses/{{.Id}}'">
+                {{.Title}}
+                {{if .IsTransfer}}
+                <em>(Rembousement)</em>
+                {{end}}
+                •
+                <b>{{.FormattedAmount}}</b>
+                <br />
                 <small>payé par {{.PaidBy.Name}}</small>
             </p>
             <hr />

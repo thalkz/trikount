@@ -7,13 +7,19 @@
     <div class="container">
         <main>
             {{template "nav.html"}}
-            <h1>{{.Expense.Title}}</h1>
-            <h2>Total: {{.Expense.FormattedAmount}}</h2>
+            <h3>
+                {{.Expense.Title}}
+                {{if .Expense.IsTransfer}}
+                <em>(Rembousement)</em>
+                {{end}}
+            </h3>
+            <h4>Total: {{.Expense.FormattedAmount}}</h4>
             {{range .Expense.SpentBy}}
             <p>{{.Name}} - {{$.Expense.FormattedAmountPerMember}}</p>
             {{end}}
 
-            <button class="has-icon is-outline" onclick="location.href='/t/{{.ProjectId}}/expenses/{{.Expense.Id}}/edit'">
+            <button class="has-icon is-outline"
+                onclick="location.href='/t/{{.ProjectId}}/expenses/{{.Expense.Id}}/edit'">
                 <i class="fa-solid fa-pen"></i>
                 <span>Editer</span>
             </button>

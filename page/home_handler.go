@@ -17,13 +17,11 @@ func Home() gin.HandlerFunc {
 	}
 
 	return func(c *gin.Context) {
+		projectIds := []string{}
 		projectIdsStr, err := c.Cookie("project_ids")
 		if err != nil {
-			error_helper.HTML(http.StatusInternalServerError, err, c)
-			return
+			projectIds = strings.Split(projectIdsStr, ",")
 		}
-
-		projectIds := strings.Split(projectIdsStr, ",")
 
 		projects, err := database.GetProjects(projectIds)
 		if err != nil {

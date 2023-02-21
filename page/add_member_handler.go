@@ -11,7 +11,6 @@ import (
 
 func AddMembers() gin.HandlerFunc {
 	return func(c *gin.Context) {
-
 		projectId := c.Param("projectId")
 		memberNames := c.QueryArray("name")
 

@@ -9,6 +9,25 @@
             {{template "nav.html"}}
             <h1>{{.Name}}</h1>
 
+            {{if .ShowTutorial}}
+            <div id="tutorial-container">
+                <h5>Important: Sauvegarde & partage le lien</h5>
+                <p>Pense à conserver le lien de ce trikount quelque-part pour pouvoir y retourner. Par example: tu peux
+                    l'ajouter en favoris, le sauvegarder dans une note ou l'envoyer dans une conversation.</p>
+                <p>Lien du trikount: <code id="share-link"></code></p>
+                <script>
+                    var projectId = window.location.pathname.split("/")[2]
+                    document.getElementById("share-link").innerHTML = `trikount.com/t/${projectId}`;
+                </script>
+                <p>Si le lien est perdu, tu peux toujours retrouver ton trikount en te rendant sur
+                    <code>trikount.com</code></p>
+                <button onclick="location.href='?show_tutorial=false'">
+                    C'est fait !
+                </button>
+            </div>
+            <br />
+            {{end}}
+
             {{if not .Expenses}}
             <p>Il n'y a aucunes dépense pour le moment ! Penses à partager le lien du Trikount pour que les
                 participants puissent ajouter leurs dépenses.</p>

@@ -31,9 +31,15 @@ func CreateProject() gin.HandlerFunc {
 				return
 			}
 
+			setShowTutorialCookie(c)
 			c.Redirect(http.StatusFound, fmt.Sprintf("/t/%s/members/add", projectId))
 		}
 	}
+}
+
+func setShowTutorialCookie(c *gin.Context) {
+	const cookieExpireSeconds = 60 * 60 * 24
+	c.SetCookie("show_tutorial", "true", cookieExpireSeconds, "/", "", false, true)
 }
 
 func findAvailableProjectId() (string, error) {

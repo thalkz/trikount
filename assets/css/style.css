@@ -25,3 +25,10 @@
 #nav a:hover {
     color: #52B788;
 }
+
+#tutorial-container {
+    border-radius: 25px;
+    border: 1px solid grey;
+    background-color: azure;
+    padding: 20px;
+}

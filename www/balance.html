@@ -10,10 +10,7 @@
         {{if .ShowTutorial}}
         <div id="tutorial-container">
             <p>Sauvegarde et partage le lien de ce trikount quelque-part pour pouvoir y retourner facilement</p>
-            <p>Lien du trikount à conserver: <code id="share-link"></code></p>
-            <script>
-                document.getElementById("share-link").innerHTML = `trikount.com/t/{{.Project.Id}}`;
-            </script>
+            <p>Lien du trikount à conserver: <code id="share-link">trikount.com/t/{{.ProjectId}}</code></p>
             <button onclick="location.href='?show_tutorial=false'">
                 C'est fait !
             </button>
@@ -24,7 +21,7 @@
         <h3>{{.Project.Name}}</h3>
         <h5>Total dépensé: <b>{{.TotalSpent}}</b></h5>
 
-        <button class="button-primary" onclick="location.href='/t/{{.Project.Id}}/expenses/add'">
+        <button class="button-primary" onclick="location.href='/t/{{.ProjectId}}/expenses/add'">
             Nouvelle dépense
         </button>
 
@@ -41,7 +38,7 @@
             {{end}}
         </ul>
 
-        <button onclick="location.href='/t/{{$.Project.Id}}/members/add'">
+        <button onclick="location.href='/t/{{$.ProjectId}}/members/add'">
             Ajouter un participant
         </button>
 
@@ -53,7 +50,7 @@
             <p>
                 {{.From.Name}} doit <b>{{.FormattedAmount}}</b> à {{.To.Name}}
                 (<a
-                    href="/t/{{$.Project.Id}}/expenses/add?name=Remboursement&amount={{.Amount}}&paid_by={{.From.Id}}&{{.To.Id}}=on&is_transfer=on">rembourser</a>)
+                    href="/t/{{$.ProjectId}}/expenses/add?name=Remboursement&amount={{.Amount}}&paid_by={{.From.Id}}&{{.To.Id}}=on&is_transfer=on">rembourser</a>)
             </p>
             {{end}}
         </div>

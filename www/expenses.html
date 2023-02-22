@@ -21,13 +21,10 @@
         <div class="clickable-container">
             <p onclick="location.href='/t/{{$.ProjectId}}/expenses/{{.Id}}'">
                 {{.Title}}
-                {{if .IsTransfer}}
-                <em>(Rembousement)</em>
-                {{end}}
                 •
                 <b>{{.FormattedAmount}}</b>
                 <br />
-                <small>payé par {{.PaidBy.Name}}</small>
+                <small>payé par {{.PaidBy.Name}}{{if .IsTransfer}}<em> (rembousement)</em>{{end}}</small>
             </p>
         </div>
         <hr />

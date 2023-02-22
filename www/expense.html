@@ -8,13 +8,15 @@
         {{template "nav.html"}}
         <h3>
             {{.Expense.Title}}
-            {{if .Expense.IsTransfer}}
-            <em>(Rembousement)</em>
-            {{end}}
             • <b>{{.Expense.FormattedAmount}}</b>
         </h3>
-        <p><em>payé par {{.Expense.PaidBy.Name}}</em><br/>
-        {{.Expense.FormattedTimeAgo}}</p>
+        <p><em>payé par {{.Expense.PaidBy.Name}}</em>
+            {{if .Expense.IsTransfer}}
+            <em> (rembousement)</em>
+            {{end}}
+            <br />
+            {{.Expense.FormattedTimeAgo}}
+        </p>
         Pour
         <ul>
             {{range .Expense.SpentBy}}

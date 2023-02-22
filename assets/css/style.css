@@ -46,3 +46,7 @@
 label {
     display: inline;
 }
+
+.clickable-container p:hover {
+    cursor: pointer;
+}

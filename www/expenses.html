@@ -18,16 +18,18 @@
 
         <br /><br />
         {{range .Expenses}}
-        <p onclick="location.href='/t/{{$.ProjectId}}/expenses/{{.Id}}'">
-            {{.Title}}
-            {{if .IsTransfer}}
-            <em>(Rembousement)</em>
-            {{end}}
-            •
-            <b>{{.FormattedAmount}}</b>
-            <br />
-            <small>payé par {{.PaidBy.Name}}</small>
-        </p>
+        <div class="clickable-container">
+            <p onclick="location.href='/t/{{$.ProjectId}}/expenses/{{.Id}}'">
+                {{.Title}}
+                {{if .IsTransfer}}
+                <em>(Rembousement)</em>
+                {{end}}
+                •
+                <b>{{.FormattedAmount}}</b>
+                <br />
+                <small>payé par {{.PaidBy.Name}}</small>
+            </p>
+        </div>
         <hr />
         {{end}}
     </div>

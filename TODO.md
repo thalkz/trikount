@@ -19,17 +19,16 @@
 - [x] feat: Mark some expenses as refunds
 - [x] feat: Create a 1-click refund button
 
-## Milestone D - Admin Dashboard
-
-- [ ] feat: Admin script for listing projects and members
-
 ## Milestone E - Improved UI
 
 - [ ] fix: Fix missing favicon.ico
-- [ ] feat: Improve UI (mobile & desktop)
+- [x] feat: Improve UI (mobile & desktop)
+- [ ] feat: Delete expense
+- [ ] feat: See expense date in details page
 
 ## Backlog
 
+- [ ] feat: Admin script for listing projects and members
 - [ ] chore: Add unit tests
 - [ ] chore: Write a README.md
 - [ ] feat: Validate user input (project, expense, member)

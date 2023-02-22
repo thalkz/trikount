@@ -21,10 +21,11 @@
 
 ## Milestone E - Improved UI
 
-- [ ] fix: Fix missing favicon.ico
+- [x] fix: Fix missing favicon.ico
 - [x] feat: Improve UI (mobile & desktop)
 - [ ] feat: Delete expense
 - [ ] feat: See expense date in details page
+- [ ] feat: Rename a Trikount
 
 ## Backlog
 

@@ -9,10 +9,10 @@
 
         {{if .ShowTutorial}}
         <div id="tutorial-container">
-            <p>Sauvegarde et partage le lien de ce trikount quelque-part pour pouvoir y retourner facilement</p>
-            <p>Lien du trikount à conserver: <code id="share-link">trikount.com/t/{{.ProjectId}}</code></p>
+            <p>Sauvegarde et partage le lien de ce trikount quelque-part pour pouvoir y retourner facilement.<br />
+                Lien du trikount à conserver: <code id="share-link">trikount.com/t/{{.ProjectId}}</code></p>
             <button onclick="location.href='?show_tutorial=false'">
-                C'est fait !
+                C'est bon !
             </button>
         </div>
         <br />
@@ -43,7 +43,7 @@
         </button>
 
         {{if .Transfers}}
-        <br/><br />
+        <br /><br />
         <div class="rounded-container">
             <p>Comment équilibrer ?</p>
             {{range .Transfers}}

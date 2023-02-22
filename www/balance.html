@@ -5,35 +5,59 @@
 
 <body>
     <div class="container">
-        <main>
-            {{template "nav.html"}}
+        {{template "nav.html"}}
 
-            <h1>Balance</h1>
-            <h5>Total dépensé: {{.TotalSpent}}</h5>
+        {{if .ShowTutorial}}
+        <div id="tutorial-container">
+            <p>Sauvegarde et partage le lien de ce trikount quelque-part pour pouvoir y retourner facilement</p>
+            <p>Lien du trikount à conserver: <code id="share-link"></code></p>
+            <script>
+                document.getElementById("share-link").innerHTML = `trikount.com/t/{{.Project.Id}}`;
+            </script>
+            <button onclick="location.href='?show_tutorial=false'">
+                C'est fait !
+            </button>
+        </div>
+        <br />
+        {{end}}
 
-            <ul>
-                {{range .Balance}}
-                {{if eq .Balance 0.0}}
-                <li>{{.Name}}: <b>{{.FormattedBalance}}</b></li>
-                {{else if gt .Balance 0.0}}
-                <li>{{.Name}}: <b style="color:green;">{{.FormattedBalance}}</b></li>
-                {{else}}
-                <li>{{.Name}}: <b style="color:red;">{{.FormattedBalance}}</b></li>
-                {{end}}
-                {{end}}
-            </ul>
+        <h3>{{.Project.Name}}</h3>
+        <h5>Total dépensé: <b>{{.TotalSpent}}</b></h5>
 
-            <fieldset>
-                <legend>Comment équilibrer ?</legend>
-                {{range .Transfers}}
-                <p>
-                    {{.From.Name}} doit <b>{{.FormattedAmount}}</b> à {{.To.Name}}
-                    (<a href="/t/{{$.ProjectId}}/expenses/add?name=Remboursement&amount={{.Amount}}&paid_by={{.From.Id}}&{{.To.Id}}=on&is_transfer=on">rembourser</a>)
-                </p>
-                {{end}}
-            </fieldset>
-        </main>
-        {{template "footer.html"}}
+        <button class="button-primary" onclick="location.href='/t/{{.Project.Id}}/expenses/add'">
+            Nouvelle dépense
+        </button>
+
+        <br />
+        <ul>
+            {{range .Balance}}
+            {{if eq .Balance 0.0}}
+            <li>{{.Name}}: <b>{{.FormattedBalance}}</b></li>
+            {{else if gt .Balance 0.0}}
+            <li>{{.Name}}: <b style="color:green;">{{.FormattedBalance}}</b></li>
+            {{else}}
+            <li>{{.Name}}: <b style="color:red;">{{.FormattedBalance}}</b></li>
+            {{end}}
+            {{end}}
+        </ul>
+
+        <button onclick="location.href='/t/{{$.Project.Id}}/members/add'">
+            Ajouter un participant
+        </button>
+
+        {{if .Transfers}}
+        <br/><br />
+        <div class="rounded-container">
+            <p>Comment équilibrer ?</p>
+            {{range .Transfers}}
+            <p>
+                {{.From.Name}} doit <b>{{.FormattedAmount}}</b> à {{.To.Name}}
+                (<a
+                    href="/t/{{$.Project.Id}}/expenses/add?name=Remboursement&amount={{.Amount}}&paid_by={{.From.Id}}&{{.To.Id}}=on&is_transfer=on">rembourser</a>)
+            </p>
+            {{end}}
+        </div>
+        {{end}}
     </div>
 </body>
 

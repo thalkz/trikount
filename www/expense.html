@@ -5,25 +5,27 @@
 
 <body>
     <div class="container">
-        <main>
-            {{template "nav.html"}}
-            <h3>
-                {{.Expense.Title}}
-                {{if .Expense.IsTransfer}}
-                <em>(Rembousement)</em>
-                {{end}}
-            </h3>
-            <h4>Total: {{.Expense.FormattedAmount}}</h4>
-            {{range .Expense.SpentBy}}
-            <p>{{.Name}} - {{$.Expense.FormattedAmountPerMember}}</p>
+        {{template "nav.html"}}
+        <h3>
+            {{.Expense.Title}}
+            {{if .Expense.IsTransfer}}
+            <em>(Rembousement)</em>
             {{end}}
+            • <b>{{.Expense.FormattedAmount}}</b>
+        </h3>
+        <p><em>payé par {{.Expense.PaidBy.Name}}</em><br/>
+        {{.Expense.FormattedTimeAgo}}</p>
+        Pour
+        <ul>
+            {{range .Expense.SpentBy}}
+            <li>{{.Name}}: <b>{{$.Expense.FormattedAmountPerMember}}</b></li>
+            {{end}}
+        </ul>
 
-            <button class="has-icon is-outline"
-                onclick="location.href='/t/{{.ProjectId}}/expenses/{{.Expense.Id}}/edit'">
-                <i class="fa-solid fa-pen"></i>
-                <span>Editer</span>
-            </button>
-        </main>
+        <button class="has-icon is-outline" onclick="location.href='/t/{{.ProjectId}}/expenses/{{.Expense.Id}}/edit'">
+            <i class="fa-solid fa-pen"></i>
+            <span>Editer</span>
+        </button>
     </div>
 </body>
 

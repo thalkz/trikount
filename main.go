@@ -28,11 +28,11 @@ func main() {
 	project := r.Group("/t")
 	project.Use(middleware.SetProjectCookie())
 	{
-		project.GET("/:projectId/", page.Project())
+		project.GET("/:projectId/", page.Balance())
+		project.GET("/:projectId/expenses", page.Expenses())
 		project.GET("/:projectId/expenses/add", page.AddExpense())
 		project.GET("/:projectId/expenses/:expenseId", page.Expense())
 		project.GET("/:projectId/expenses/:expenseId/edit", page.EditExpense())
-		project.GET("/:projectId/balance", page.Balance())
 		project.GET("/:projectId/members/add", page.AddMembers())
 		project.GET("/:projectId/settings", page.Settings())
 	}

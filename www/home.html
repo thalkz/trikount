@@ -5,29 +5,48 @@
 
 <body>
     <div class="container">
-        <main>
-            <h1>Trikount</h1>
-            {{range .Projects}}
-            <button class="has-icon" onclick="location.href='/t/{{.Id}}'">
-                <i class="fa-solid fa-plus"></i>
-                <span>{{.Name}}</span>
-            </button>
-            <br/>
-            {{end}}
-            <p>Pour créer un nouveau Trikount, ça se passe par ici:</p>
-            <button onclick="location.href='/create'">Créer un Trikount</button>
-            <br /><br />
-            <h5>Rejoindre un Trikount</h5>
-            <p>Pour rejoindre un Trikount existant, il suffit de clicker sur le lien envoyé par le créateur du Trikount.
-            </p>
-            <p>Le lien doit ressembler à celui ci : <code>trikount.com/t/XXXXXX</code></p>
-            <h5>Comment ça fonctionne ?</h5>
-            Trikount permet de facilement partager des dépenses entre amis. Pour un voyage, une coloc, un projet etc.
-            puis donne des instructions pour faciliter le remboursement.
-            <br /><br />
-            <h5>Combien ça coute ? Il y a des pubs ?</h5>
-            Trikount est 100% gratuit et sans pubs, tout simplement.
-        </main>
+        <br />
+        <h3>Trikount.com</h3>
+        <br />
+
+        <div class="row">
+            <div class="one-half column">
+                <p>Pour créer un nouveau Trikount, ça se passe par ici</p>
+                <button class="button-primary" onclick="location.href='/create'">Créer un Trikount</button>
+                <br /><br />
+            </div>
+            <div class="one-half column">
+                {{if .Projects}}
+                <div class="rounded-container">
+                    <p>Mes Trikounts récents</p>
+                    {{range .Projects}}
+                    <button class="has-icon" onclick="location.href='/t/{{.Id}}'">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>{{.Name}}</span>
+                    </button>
+                    <br />
+                    {{end}}
+                </div>
+                {{end}}
+            </div>
+        </div>
+
+        <br /><br />
+        <hr class="solid">
+        <h4>FAQ</h4>
+        <h5>Comment rejoundre un Trikount ?</h5>
+        <p>Pour rejoindre un Trikount existant, il suffit de clicker sur le lien envoyé par le créateur du
+            Trikount.
+        </p>
+        <p>Le lien doit ressembler à celui ci : <code>trikount.com/t/XXXXXX</code></p>
+        <h5>Comment ça fonctionne ?</h5>
+        Trikount permet de facilement partager des dépenses entre amis. Pour un voyage, une coloc, un projet
+        etc.
+        puis donne des instructions pour faciliter le remboursement.
+        <br /><br />
+        <h5>Combien ça coute ? Il y a des pubs ?</h5>
+        Trikount est 100% gratuit et sans pubs, tout simplement.
+        <br /><br />
     </div>
 </body>
 

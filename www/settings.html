@@ -5,13 +5,11 @@
 
 <body>
     <div class="container">
-        <main>
-            {{template "nav.html"}}
-            <h1>Paramètres</h1>
-            <form onsubmit="return confirm('Êtes-vous sur de vouloir supprimer définitivement {{.Project.Name}} ?');">
-                <button class="danger-button" type="submit" name="delete" value="true">Supprimer ce Trikount</button>
-            </form>
-        </main>
+        {{template "nav.html"}}
+        <h3>Paramètres</h3>
+        <form onsubmit="return confirm('Êtes-vous sur de vouloir supprimer définitivement {{.Project.Name}} ?');">
+            <button class="danger-button" type="submit" name="delete" value="true">Supprimer ce Trikount</button>
+        </form>
     </div>
 </body>
 

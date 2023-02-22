@@ -5,44 +5,45 @@
 
 <body>
     <div class="container">
-        <main>
-            {{template "nav.html"}}
+        {{template "nav.html"}}
 
-            {{if .IsEdit}}
-            <h3>Editer la dépense</h3>
-            {{else}}
-            <h3>Nouvelle dépense</h3>
-            {{end}}
-            <form>
-                <input type="text" id="name" name="name" placeholder="Titre" value="{{.Expense.Title}}" required>
-                <input type="number" min="0" step="0.01" id="amount" name="amount" value="{{.Expense.Amount}}" required>
-                <br />
-                <input type="checkbox" id="isTransfer" name="is_transfer" {{if $.Expense.IsTransfer}}checked{{end}}>
-                <label for="isTransfer">Ceci est un remboursement</label>
-                <br />
-                <label for="cars">Payé par</label>
-                <select name="paid_by" id="paid_by">
-                    <option value="none">-- Qui a payé ? --</option>
-                    {{range .Members}}
-                    <option value="{{.Id}}" {{if eq $.Expense.PaidBy.Id .Id}}selected{{end}}>{{.Name}}</option>
-                    {{end}}
-                </select>
-                <br />
-
-                <label>Pour</label>
+        {{if .IsEdit}}
+        <h3>Editer la dépense</h3>
+        {{else}}
+        <h3>Nouvelle dépense</h3>
+        {{end}}
+        <form>
+            Titre:
+            <input class="u-full-width" type="text" id="name" name="name" placeholder="Ma dépense..." value="{{.Expense.Title}}"
+                required>
+            Coût en euros:
+            <input class="u-full-width" type="number" min="0" step="0.01" id="amount" name="amount"
+                value="{{.Expense.Amount}}" inputmode="numeric" required>
+            <br />
+            <br />
+            Payé par
+            <select name="paid_by" id="paid_by">
+                <option value="none">???</option>
                 {{range .Members}}
-                <div>
-                    <input type="checkbox" id="{{.Id}}" name="{{.Id}}" {{if $.Expense.HasSpent .Id}}checked{{end}}>
-                    <label for="{{.Id}}">{{.Name}}</label>
-                </div>
+                <option value="{{.Id}}" {{if eq $.Expense.PaidBy.Id .Id}}selected{{end}}>{{.Name}}</option>
                 {{end}}
-                <br />
-                <button class="button has-icon full" type="submit" name="save" value="on">
-                    <i class="fa-solid fa-check"></i>
-                    <span>{{if .IsEdit}}Enregister{{else}}Ajouter{{end}}</span>
-                </button>
-            </form>
-        </main>
+            </select>
+            <br />
+
+            Pour
+            {{range .Members}}
+            <div>
+                <input type="checkbox" id="{{.Id}}" name="{{.Id}}" {{if $.Expense.HasSpent .Id}}checked{{end}}>
+                <label for="{{.Id}}">{{.Name}}</label>
+            </div>
+            {{end}}
+            <hr />
+            <input type="checkbox" id="isTransfer" name="is_transfer" {{if $.Expense.IsTransfer}}checked{{end}}>
+            <label for="isTransfer">Ceci est un remboursement</label>
+            <br />
+            <button class="button-primary" type="submit" name="save" value="on">{{if
+                .IsEdit}}Enregister{{else}}Ajouter{{end}}</button>
+        </form>
     </div>
 </body>
 

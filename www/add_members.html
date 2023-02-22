@@ -8,14 +8,12 @@
         <main>
             {{template "nav.html"}}
 
-            <h5>Ajouter un participant</h5>
+            <h3>Nouveaux participants</h3>
             <form>
-                <br />
                 <div id="member-inputs">
-                    <input type="text" id="name" name="name" placeholder="Prénom..." required>
                 </div>
-                <button id="plus-one" type="button">+</button> <button id="minus-one" type="button">-</button>
-                <br />
+                <a id="plus-one">[ Ajouter ]</a> <a id="minus-one">[ Retirer ]</a>
+                <br /><br />
                 <button type="submit" class="button-primary"><span>Confimer</span></button>
             </form>
         </main>
@@ -23,25 +21,29 @@
 </body>
 
 <script>
-    let form = document.getElementById("member-inputs");
-    let plusOne = document.getElementById("plus-one");
-    plusOne.onclick = function () {
+    function addInput() {
+        let form = document.getElementById("member-inputs");
         let inputNode = document.createElement('input');
         inputNode.setAttribute('type', 'text');
         inputNode.setAttribute('name', 'name');
-        inputNode.setAttribute('placeholder', 'Prénom...');
+        inputNode.setAttribute('placeholder', 'Nom du participant...');
         inputNode.required = true;
-        form.appendChild(document.createElement('br'));
+        inputNode.className = 'u-full-width'
         form.appendChild(inputNode);
+        form.appendChild(document.createElement('br'));
     }
 
-    let minusOne = document.getElementById("minus-one");
-    minusOne.onclick = function () {
+    function removeInputField() {
+        let form = document.getElementById("member-inputs");
         if (form.children.length > 2) {
             form.lastChild.remove()
             form.lastChild.remove()
         }
     }
+
+    addInput()
+    document.getElementById("plus-one").onclick = addInput
+    document.getElementById("minus-one").onclick = removeInputField
 
 </script>
 

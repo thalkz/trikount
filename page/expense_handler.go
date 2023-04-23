@@ -23,11 +23,13 @@ func Expense() gin.HandlerFunc {
 		expenseId, err := strconv.Atoi(expenseIdStr)
 		if err != nil {
 			error_helper.HTML(http.StatusBadRequest, err, c)
+			return
 		}
 
 		expense, err := database.GetExpense(expenseId)
 		if err != nil {
 			error_helper.HTML(http.StatusInternalServerError, err, c)
+			return
 		}
 
 		c.HTML(http.StatusOK, "expense.html", page{

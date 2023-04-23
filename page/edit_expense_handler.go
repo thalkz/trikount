@@ -27,17 +27,20 @@ func EditExpense() gin.HandlerFunc {
 		expenseId, err := strconv.Atoi(expenseIdStr)
 		if err != nil {
 			error_helper.HTML(http.StatusBadRequest, err, c)
+			return
 		}
 
 		members, err := database.GetMembers(projectId)
 		if err != nil {
 			error_helper.HTML(http.StatusInternalServerError, err, c)
+			return
 		}
 
 		if title == "" {
 			expense, err := database.GetExpense(expenseId)
 			if err != nil {
 				error_helper.HTML(http.StatusInternalServerError, err, c)
+				return
 			}
 
 			// Order members so that the paidBy member is first in the slice
@@ -64,10 +67,12 @@ func EditExpense() gin.HandlerFunc {
 		amount, err := strconv.ParseFloat(amountStr, 32)
 		if err != nil {
 			error_helper.HTML(http.StatusInternalServerError, err, c)
+			return
 		}
 		paidBy, err := strconv.Atoi(paidByStr)
 		if err != nil {
 			error_helper.HTML(http.StatusInternalServerError, err, c)
+			return
 		}
 
 		var spendBy []int

@@ -14,7 +14,7 @@ func SetProjectCookie() gin.HandlerFunc {
 		current := c.Param("projectId")
 		cookie, err := c.Cookie("project_ids")
 		if err != nil {
-			log.Printf("failed to get cookie: %v", cookie)
+			log.Printf("ERROR: Failed to get cookie: %v", cookie)
 		}
 		set := make(map[string]bool)
 		set[current] = true
@@ -28,7 +28,7 @@ func SetProjectCookie() gin.HandlerFunc {
 			cleaned = append(cleaned, id)
 		}
 		cookie = strings.Join(cleaned, ",")
-		log.Printf("DEBUG: setting cookie project_ids=%v", cookie)
+		log.Printf("DEBUG: Setting cookie project_ids=%v", cookie)
 		c.SetCookie("project_ids", cookie, cookieExpireSeconds, "/", "", false, true)
 	}
 }

@@ -12,10 +12,31 @@
             <input type="text" id="name" name="name" placeholder="{{.Project.Name}}" required>
             <button type="submit">Renommer</button>
         </form>
+        <button onclick="notifyMe()">Activer les notifications</button>
         <form onsubmit="return confirm('Êtes-vous sur de vouloir supprimer définitivement {{.Project.Name}} ?');">
             <button class="danger-button" type="submit" name="delete" value="on">Supprimer ce Trikount</button>
         </form>
     </div>
 </body>
+
+<script>
+    function notifyMe() {
+        if (!('Notification' in window)) {
+            alert('Votre navigateur ne prend pas en charge les notifications')
+        }
+
+        else if (Notification.permission === 'granted') {
+            const notification = new Notification('Les notifications sont actives !')
+        }
+
+        else if (Notification.permission !== 'denied') {
+            Notification.requestPermission().then((permission) => {
+                if (permission === 'granted') {
+                    const notification = new Notification('Activation réussie !')
+                }
+            })
+        }
+    }
+</script>
 
 </html>

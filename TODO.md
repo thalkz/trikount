@@ -45,3 +45,4 @@
 - [ ] feat: Validate user input (project, expense, member)
 - [ ] feat: Integrate Lydia for refunds
 - [ ] feat: Create an account with Webauthn (webauthn.io)
+- [ ] feat: Add push notifications when an expense is added

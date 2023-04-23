@@ -60,10 +60,11 @@ func EditExpense(projectId string, expenseId int, title string, amount float64, 
 }
 
 func GetExpenses(projectId string) ([]*models.Expense, error) {
-	rows, err := db.Query(`SELECT expenses.id, title, amount, members.id, members.name, is_transfer, updated_at
+	rows, err := db.Query(`SELECT expenses.id, expenses.title, expenses.amount, members.id, members.name, expenses.is_transfer, expenses.updated_at
 		FROM expenses 
 		JOIN members ON expenses.paid_by = members.id
-		WHERE expenses.project_id = $1`, projectId)
+		WHERE expenses.project_id = $1
+		ORDER BY expenses.id desc`, projectId)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to get expenses")
 	}

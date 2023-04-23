@@ -31,7 +31,7 @@
 - [ ] bug: Values are sometimes displayed with many decimals (ex: 2.6666666666)
 - [ ] feat: Make pages visually different (helps to navigate)
 - [ ] feat: Create a dedicated "share" button
-- [ ] feat: Show the most recent expense first
+- [x] feat: Show the most recent expense first
 - [ ] feat: By default, all participants should be selected in a new expense
 - [ ] bug: It's impossible to add decimals oin iPhone (cannot input a comma)
 - [ ] bug: It's possible to open expenses from other projects by editing the url

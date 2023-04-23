@@ -2,6 +2,8 @@ package database
 
 import (
 	"database/sql"
+	"fmt"
+	"log"
 	"os"
 
 	"github.com/pkg/errors"
@@ -9,95 +11,95 @@ import (
 
 var db *sql.DB
 
-func Setup() (close func() error, err error) {
-	err = os.Mkdir("data", os.ModePerm)
+func Setup() (func() error, error) {
+	err := os.Mkdir("data", os.ModePerm)
 	if err != nil && !os.IsExist(err) {
-		errors.Wrap(err, "failed to create folder")
-		return
+		return nil, errors.Wrap(err, "failed to create folder")
 	}
 
 	db, err = sql.Open("sqlite3", "data/data.db")
 	if err != nil {
-		errors.Wrap(err, "failed to open database")
+		return nil, errors.Wrap(err, "failed to open database")
 	}
-	close = db.Close
 
-	_, err = db.Exec(`CREATE TABLE IF NOT EXISTS projects (
-		id text NOT NULL PRIMARY KEY,
-		name text NOT NULL,
-		created_at text NOT NULL
-		)`)
+	err = runAllMigrations()
 	if err != nil {
-		err = errors.Wrap(err, "failed to create projects table")
-		return
+		return nil, errors.Wrap(err, "failed to migrate database")
 	}
 
-	_, err = db.Exec(`CREATE TABLE IF NOT EXISTS members (
-		id integer NOT NULL PRIMARY KEY,
-		name text NOT NULL,
-		project_id text NOT NULL,
-		FOREIGN KEY (project_id) REFERENCES projects(id)
-	)`)
+	return db.Close, nil
+}
+
+// Execute all migrations in order, by checking if the migration script exists for each given version.
+// For example, if the current user_version is 5, checks if 5.sql exists, and if so, execute it.
+// Cyclic migrations are also detected and throw an error (happens if a migration does not update user_version)
+func runAllMigrations() error {
+	usedFilenames := make(map[string]bool)
+	for {
+		userVersion, err := getUserVersion()
+		if err != nil {
+			return errors.Wrap(err, "failed to get migration filename")
+		}
+		log.Printf("INFO: Current database user_version is %v", userVersion)
+		filename := fmt.Sprintf("migrations/%v.sql", userVersion)
+
+		if usedFilenames[filename] {
+			return fmt.Errorf("cyclic migration detected, does %s upgrade to a new user_version ?", filename)
+		}
+		usedFilenames[filename] = true
+
+		hasMigration := fileExists(filename)
+		if !hasMigration {
+			fmt.Printf("INFO: Database migrations completed: %s does not exists\n", filename)
+			break
+		}
+
+		log.Printf("INFO: Executing migration with file %s...", filename)
+		err = runMigrationScript(filename)
+		if err != nil {
+			return errors.Wrapf(err, "failed to run migration %s", filename)
+		}
+		log.Printf("INFO: Migration successful !")
+	}
+	return nil
+}
+
+func getUserVersion() (int, error) {
+	row := db.QueryRow("PRAGMA user_version")
+	var userVersion int
+	err := row.Scan(&userVersion)
 	if err != nil {
-		err = errors.Wrap(err, "failed to create members table")
-		return
+		return 0, errors.Wrap(err, "failed to read user_version")
 	}
+	return userVersion, nil
+}
 
-	_, err = db.Exec(`CREATE TABLE IF NOT EXISTS expenses (
-		id integer NOT NULL PRIMARY KEY,
-		project_id text,
-		title text NOT NULL,
-		amount real NOT NULL,
-		paid_by integer,
-		is_transfer bool NOT NULL,
-		FOREIGN KEY (project_id) REFERENCES projects(id),
-		FOREIGN KEY (paid_by) REFERENCES members(id)
-	)`)
+func fileExists(filename string) bool {
+	_, err := os.Stat(filename)
+	return err == nil
+}
+
+func runMigrationScript(filename string) error {
+	contentBytes, err := os.ReadFile(filename)
 	if err != nil {
-		err = errors.Wrap(err, "failed to create expenses table")
-		return
+		return errors.Wrap(err, "failed to read migration file")
 	}
+	contentStr := string(contentBytes)
 
-	_, err = db.Exec(`CREATE TABLE IF NOT EXISTS spent_by (
-		expense_id integer,
-		member_id integer,
-		FOREIGN KEY (expense_id) REFERENCES expenses(id),
-		FOREIGN KEY (member_id) REFERENCES members(id)
-	)`)
+	tx, err := db.Begin()
+	defer tx.Rollback()
 	if err != nil {
-		err = errors.Wrap(err, "failed to create spent_by table")
-		return
+		return errors.Wrap(err, "failed to begin tx")
 	}
 
-	// Create a `parts` view, that is used to query the current balance
-	_, err = db.Exec(`CREATE VIEW IF NOT EXISTS v_parts AS
-		SELECT expense_id, project_id, title, amount / COUNT(*) amount
-			FROM expenses
-			JOIN spent_by ON expenses.id = spent_by.expense_id
-			GROUP BY expenses.id`)
+	_, err = tx.Exec(contentStr)
 	if err != nil {
-		err = errors.Wrap(err, "failed to create parts view")
-		return
+		return errors.Wrap(err, "failed to execute migration")
 	}
 
-	_, err = db.Exec(`CREATE VIEW IF NOT EXISTS v_spent_balance AS
-		SELECT spent_by.member_id, SUM(amount) amount
-			FROM v_parts
-			JOIN spent_by ON spent_by.expense_id = v_parts.expense_id
-			GROUP BY spent_by.member_id;`)
+	err = tx.Commit()
 	if err != nil {
-		err = errors.Wrap(err, "failed to create spent_balance view")
-		return
+		return errors.Wrap(err, "failed to commit migration")
 	}
-
-	_, err = db.Exec(`CREATE VIEW IF NOT EXISTS v_paid_balance AS
-		SELECT paid_by AS member_id, project_id, SUM(amount) amount 
-		FROM expenses 
-		GROUP BY paid_by`)
-	if err != nil {
-		err = errors.Wrap(err, "failed to create paid_balance view")
-		return
-	}
-
-	return
+	return nil
 }

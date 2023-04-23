@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/thalkz/trikount/database"
@@ -71,7 +72,8 @@ func AddExpense() gin.HandlerFunc {
 			})
 			return
 		} else {
-			err = database.AddExpense(projectId, title, amount, paidBy, spendBy, isTransfer)
+			now := time.Now()
+			err = database.AddExpense(projectId, title, amount, paidBy, spendBy, isTransfer, now)
 			if err != nil {
 				error_helper.HTML(http.StatusInternalServerError, err, c)
 				return

@@ -1,13 +1,15 @@
 package database
 
 import (
+	"time"
+
 	"github.com/pkg/errors"
 	"github.com/thalkz/trikount/models"
 )
 
-func AddExpense(projectId string, title string, amount float64, paidBy int, spendBy []int, isTransfer bool) error {
-	row := db.QueryRow(`INSERT INTO expenses (title, amount, project_id, paid_by, is_transfer)
-		values($1, $2, $3, $4, $5) RETURNING id`, title, amount, projectId, paidBy, isTransfer)
+func AddExpense(projectId string, title string, amount float64, paidBy int, spendBy []int, isTransfer bool, updatedAt time.Time) error {
+	row := db.QueryRow(`INSERT INTO expenses (title, amount, project_id, paid_by, is_transfer, updated_at)
+		values($1, $2, $3, $4, $5) RETURNING id`, title, amount, projectId, paidBy, isTransfer, updatedAt.Format(time.UnixDate))
 	var expenseId int
 	err := row.Scan(&expenseId)
 	if err != nil {
@@ -29,15 +31,15 @@ func AddExpense(projectId string, title string, amount float64, paidBy int, spen
 	return nil
 }
 
-func EditExpense(projectId string, expenseId int, title string, amount float64, paidBy int, spentBy []int, isTransfer bool) error {
+func EditExpense(projectId string, expenseId int, title string, amount float64, paidBy int, spentBy []int, isTransfer bool, updatedAt time.Time) error {
 	tx, err := db.Begin()
 	if err != nil {
 		return errors.Wrap(err, "failed to begin tx")
 	}
 	defer tx.Rollback()
 
-	_, err = tx.Exec(`UPDATE expenses SET title = ?, amount = ?, paid_by = ?, is_transfer = ? WHERE id = ?`,
-		title, amount, paidBy, isTransfer, expenseId)
+	_, err = tx.Exec(`UPDATE expenses SET title = ?, amount = ?, paid_by = ?, is_transfer = ?, updated_at = ? WHERE id = ?`,
+		title, amount, paidBy, isTransfer, updatedAt.Format(time.UnixDate), expenseId)
 	if err != nil {
 		return errors.Wrap(err, "failed to update expense")
 	}
@@ -63,7 +65,7 @@ func EditExpense(projectId string, expenseId int, title string, amount float64, 
 }
 
 func GetExpenses(projectId string) ([]*models.Expense, error) {
-	rows, err := db.Query(`SELECT expenses.id, title, amount, members.id, members.name, is_transfer
+	rows, err := db.Query(`SELECT expenses.id, title, amount, members.id, members.name, is_transfer, updated_at
 		FROM expenses 
 		JOIN members ON expenses.paid_by = members.id
 		WHERE expenses.project_id = $1`, projectId)
@@ -74,9 +76,14 @@ func GetExpenses(projectId string) ([]*models.Expense, error) {
 	var expenses []*models.Expense
 	for rows.Next() {
 		var expense models.Expense
-		err := rows.Scan(&expense.Id, &expense.Title, &expense.Amount, &expense.PaidBy.Id, &expense.PaidBy.Name, &expense.IsTransfer)
+		var updatedAtStr string
+		err := rows.Scan(&expense.Id, &expense.Title, &expense.Amount, &expense.PaidBy.Id, &expense.PaidBy.Name, &expense.IsTransfer, &updatedAtStr)
 		if err != nil {
 			return nil, errors.Wrap(err, "failed to scan expense row")
+		}
+		expense.UpdatedAt, err = time.Parse(time.UnixDate, updatedAtStr)
+		if err != nil {
+			return nil, errors.Wrap(err, "failed to parse time")
 		}
 		expenses = append(expenses, &expense)
 	}
@@ -99,15 +106,20 @@ func GetTotalSpent(projectId string) (float64, error) {
 }
 
 func GetExpense(id int) (*models.Expense, error) {
-	row := db.QueryRow(`SELECT expenses.id, expenses.title, expenses.amount, members.id, members.name, expenses.is_transfer
+	row := db.QueryRow(`SELECT expenses.id, expenses.title, expenses.amount, members.id, members.name, expenses.is_transfer, expenses.updated_at
 		FROM expenses 
 		JOIN members ON expenses.paid_by = members.id
 		WHERE expenses.id = $1`, id)
 
 	var expense models.Expense
-	err := row.Scan(&expense.Id, &expense.Title, &expense.Amount, &expense.PaidBy.Id, &expense.PaidBy.Name, &expense.IsTransfer)
+	var updatedAtStr string
+	err := row.Scan(&expense.Id, &expense.Title, &expense.Amount, &expense.PaidBy.Id, &expense.PaidBy.Name, &expense.IsTransfer, &updatedAtStr)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to scan expense")
+	}
+	expense.UpdatedAt, err = time.Parse(time.UnixDate, updatedAtStr)
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to parse time")
 	}
 
 	err = row.Err()

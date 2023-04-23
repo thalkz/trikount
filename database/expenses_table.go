@@ -9,14 +9,9 @@ import (
 
 func AddExpense(projectId string, title string, amount float64, paidBy int, spendBy []int, isTransfer bool, updatedAt time.Time) error {
 	row := db.QueryRow(`INSERT INTO expenses (title, amount, project_id, paid_by, is_transfer, updated_at)
-		values($1, $2, $3, $4, $5) RETURNING id`, title, amount, projectId, paidBy, isTransfer, updatedAt.Format(time.UnixDate))
+		values($1, $2, $3, $4, $5, $6) RETURNING id`, title, amount, projectId, paidBy, isTransfer, updatedAt.Format(time.UnixDate))
 	var expenseId int
 	err := row.Scan(&expenseId)
-	if err != nil {
-		return errors.Wrap(err, "failed to scan expense row")
-	}
-
-	err = row.Err()
 	if err != nil {
 		return errors.Wrap(err, "failed to insert expense")
 	}

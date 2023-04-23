@@ -12,11 +12,6 @@ import (
 )
 
 func Expense() gin.HandlerFunc {
-	type page struct {
-		ProjectId string
-		Expense   *models.Expense
-	}
-
 	return func(c *gin.Context) {
 		expenseIdStr := c.Param("expenseId")
 		projectId := c.Param("projectId")
@@ -29,25 +24,37 @@ func Expense() gin.HandlerFunc {
 		}
 
 		if delete == "on" {
-			err = database.DeleteExpense(expenseId)
-			if err != nil {
-				error_helper.HTML(http.StatusInternalServerError, err, c)
-				return
-			}
-
-			c.Redirect(http.StatusFound, fmt.Sprintf("/t/%s/expenses", projectId))
-			return
+			handleDeleteExpense(c, projectId, expenseId)
+		} else {
+			handleRenderExpensePage(c, projectId, expenseId)
 		}
-
-		expense, err := database.GetExpense(expenseId)
-		if err != nil {
-			error_helper.HTML(http.StatusInternalServerError, err, c)
-			return
-		}
-
-		c.HTML(http.StatusOK, "expense.html", page{
-			Expense:   expense,
-			ProjectId: projectId,
-		})
 	}
+}
+
+func handleDeleteExpense(c *gin.Context, projectId string, expenseId int) {
+	err := database.DeleteExpense(expenseId)
+	if err != nil {
+		error_helper.HTML(http.StatusInternalServerError, err, c)
+		return
+	}
+
+	c.Redirect(http.StatusFound, fmt.Sprintf("/t/%s/expenses", projectId))
+}
+
+func handleRenderExpensePage(c *gin.Context, projectId string, expenseId int) {
+	type page struct {
+		ProjectId string
+		Expense   *models.Expense
+	}
+
+	expense, err := database.GetExpense(expenseId)
+	if err != nil {
+		error_helper.HTML(http.StatusInternalServerError, err, c)
+		return
+	}
+
+	c.HTML(http.StatusOK, "expense.html", page{
+		Expense:   expense,
+		ProjectId: projectId,
+	})
 }

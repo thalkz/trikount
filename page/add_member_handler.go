@@ -15,18 +15,25 @@ func AddMembers() gin.HandlerFunc {
 		memberNames := c.QueryArray("name")
 
 		if len(memberNames) == 0 {
-			c.HTML(http.StatusOK, "add_members.html", nil)
+			handleRenderAddMembersPage(c)
+		} else {
+			handleAddMembers(c, projectId, memberNames)
+		}
+	}
+}
+
+func handleRenderAddMembersPage(c *gin.Context) {
+	c.HTML(http.StatusOK, "add_members.html", nil)
+}
+
+func handleAddMembers(c *gin.Context, projectId string, memberNames []string) {
+	for _, name := range memberNames {
+		err := database.AddMember(projectId, name)
+		if err != nil {
+			error_helper.HTML(http.StatusInternalServerError, err, c)
 			return
 		}
-
-		for _, name := range memberNames {
-			err := database.AddMember(projectId, name)
-			if err != nil {
-				error_helper.HTML(http.StatusInternalServerError, err, c)
-				return
-			}
-		}
-
-		c.Redirect(http.StatusFound, fmt.Sprintf("/t/%s", projectId))
 	}
+
+	c.Redirect(http.StatusFound, fmt.Sprintf("/t/%s", projectId))
 }

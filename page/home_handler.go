@@ -1,7 +1,6 @@
 package page
 
 import (
-	"log"
 	"net/http"
 	"strings"
 
@@ -28,8 +27,6 @@ func Home() gin.HandlerFunc {
 			error_helper.HTML(http.StatusInternalServerError, err, c)
 			return
 		}
-
-		log.Printf("DEBUG: Current projectIds: %v", projectIds)
 
 		c.HTML(http.StatusOK, "home.html", page{
 			Projects: projects,

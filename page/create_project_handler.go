@@ -17,24 +17,32 @@ func CreateProject() gin.HandlerFunc {
 		projectName := c.Query("name")
 
 		if projectName == "" {
-			c.HTML(http.StatusOK, "create_project.html", nil)
+			handleRenderCreateProjectPage(c)
 		} else {
-			projectId, err := findAvailableProjectId()
-			if err != nil {
-				error_helper.HTML(http.StatusInternalServerError, err, c)
-				return
-			}
-
-			err = database.CreateProject(projectId, projectName, time.Now())
-			if err != nil {
-				error_helper.HTML(http.StatusInternalServerError, err, c)
-				return
-			}
-
-			setShowTutorialCookie(c)
-			c.Redirect(http.StatusFound, fmt.Sprintf("/t/%s/members/add", projectId))
+			handleCreateProject(c, projectName)
 		}
 	}
+}
+
+func handleCreateProject(c *gin.Context, projectName string) {
+	projectId, err := findAvailableProjectId()
+	if err != nil {
+		error_helper.HTML(http.StatusInternalServerError, err, c)
+		return
+	}
+
+	err = database.CreateProject(projectId, projectName, time.Now())
+	if err != nil {
+		error_helper.HTML(http.StatusInternalServerError, err, c)
+		return
+	}
+
+	setShowTutorialCookie(c)
+	c.Redirect(http.StatusFound, fmt.Sprintf("/t/%s/members/add", projectId))
+}
+
+func handleRenderCreateProjectPage(c *gin.Context) {
+	c.HTML(http.StatusOK, "create_project.html", nil)
 }
 
 func setShowTutorialCookie(c *gin.Context) {

@@ -33,7 +33,7 @@
 - [ ] feat: Create a dedicated "share" button
 - [x] feat: Show the most recent expense first
 - [x] feat: By default, all participants should be selected in a new expense
-- [ ] bug: It's impossible to add decimals on iPhone (cannot input a comma)
+- [x] bug: It's impossible to add decimals on iPhone (cannot input a comma)
 - [ ] bug: It's possible to open expenses from other projects by editing the url
 - [ ] bug: It's possible to add an expense without specifying a "paid_by"
 

@@ -16,12 +16,6 @@ func AddExpense() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		projectId := c.Param("projectId")
 		save := c.Query("save")
-		title := c.Query("name")
-		amountStr := c.Query("amount")
-		paidByStr := c.Query("paid_by")
-		isTransfer := c.Query("is_transfer") == "on"
-		amount, _ := strconv.ParseFloat(amountStr, 32)
-		paidBy, _ := strconv.Atoi(paidByStr)
 
 		members, err := database.GetMembers(projectId)
 		if err != nil {
@@ -29,22 +23,29 @@ func AddExpense() gin.HandlerFunc {
 			return
 		}
 
-		var spentBy []int
-		for _, member := range members {
-			if c.Query(fmt.Sprintf("%v", member.Id)) == "on" {
-				spentBy = append(spentBy, member.Id)
-			}
-		}
-
 		if save == "on" {
-			handleAddExpense(c, projectId, title, amount, paidBy, spentBy, isTransfer)
+			handleAddExpense(c, projectId, members)
 		} else {
-			handleRenderAddExpensePage(c, projectId, title, amount, paidBy, spentBy, isTransfer, members)
+			handleRenderAddExpensePage(c, projectId, members)
 		}
 	}
 }
 
-func handleAddExpense(c *gin.Context, projectId string, title string, amount float64, paidBy int, spentBy []int, isTransfer bool) {
+func handleAddExpense(c *gin.Context, projectId string, members []*models.Member) {
+	title := c.Query("name")
+	amountStr := c.Query("amount")
+	amount, _ := strconv.ParseFloat(amountStr, 32)
+	paidByStr := c.Query("paid_by")
+	paidBy, _ := strconv.Atoi(paidByStr)
+	isTransfer := c.Query("is_transfer") == "on"
+
+	var spentBy []int
+	for _, member := range members {
+		if c.Query(fmt.Sprintf("%v", member.Id)) == "on" {
+			spentBy = append(spentBy, member.Id)
+		}
+	}
+
 	now := time.Now()
 	err := database.AddExpense(projectId, title, amount, paidBy, spentBy, isTransfer, now)
 	if err != nil {
@@ -54,34 +55,21 @@ func handleAddExpense(c *gin.Context, projectId string, title string, amount flo
 	c.Redirect(http.StatusFound, fmt.Sprintf("/t/%s", projectId))
 }
 
-func handleRenderAddExpensePage(c *gin.Context, projectId string, title string, amount float64, paidBy int, spentBy []int, isTransfer bool, members []*models.Member) {
+func handleRenderAddExpensePage(c *gin.Context, projectId string, members []*models.Member) {
 	type page struct {
 		IsEdit  bool
 		Members []*models.Member
 		Expense *models.Expense
 	}
 
-	var paidByMember models.Member
-	var spentByMembers []models.Member
-	for _, member := range members {
-		if member.Id == paidBy {
-			paidByMember = *member
-		}
-		for _, id := range spentBy {
-			if member.Id == id {
-				spentByMembers = append(spentByMembers, *member)
-			}
-		}
-	}
-
 	c.HTML(http.StatusOK, "edit_expense.html", page{
 		IsEdit: false,
 		Expense: &models.Expense{
-			Title:      title,
-			Amount:     amount,
-			PaidBy:     paidByMember,
-			SpentBy:    spentByMembers,
-			IsTransfer: isTransfer,
+			Title:      "",
+			Amount:     0,
+			PaidBy:     models.Member{},
+			SpentBy:    members,
+			IsTransfer: false,
 		},
 		Members: members,
 	})

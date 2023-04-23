@@ -145,7 +145,7 @@ func GetExpense(id int) (*models.Expense, error) {
 		if err != nil {
 			return nil, errors.Wrap(err, "failed to scan spent_by member")
 		}
-		expense.SpentBy = append(expense.SpentBy, member)
+		expense.SpentBy = append(expense.SpentBy, &member)
 	}
 
 	err = rows.Err()

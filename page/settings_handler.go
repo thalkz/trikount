@@ -1,6 +1,7 @@
 package page
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -10,27 +11,47 @@ import (
 )
 
 func Settings() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		projectId := c.Param("projectId")
+		deleteProject := c.Query("delete") == "on"
+		projectName := c.Query("name")
+
+		if deleteProject {
+			handleDeleteProject(c, projectId)
+		} else if projectName != "" {
+			handleRenameProject(c, projectId, projectName)
+		} else {
+			renderSettingsPage(c, projectId)
+		}
+	}
+}
+
+func handleDeleteProject(c *gin.Context, projectId string) {
+	database.DeleteProject(projectId)
+	c.Redirect(http.StatusFound, "/")
+}
+
+func handleRenameProject(c *gin.Context, projectId string, projectName string) {
+	err := database.RenameProject(projectId, projectName)
+	if err != nil {
+		error_helper.HTML(http.StatusBadRequest, err, c)
+		return
+	}
+	c.Redirect(http.StatusFound, fmt.Sprintf("/t/%s", projectId))
+}
+
+func renderSettingsPage(c *gin.Context, projectId string) {
 	type page struct {
 		Project *models.Project
 	}
 
-	return func(c *gin.Context) {
-		projectId := c.Param("projectId")
-		deleteProject := c.Query("delete") == "true"
-
-		if deleteProject {
-			database.DeleteProject(projectId)
-			c.Redirect(http.StatusFound, "/")
-		}
-
-		project, err := database.GetProject(projectId)
-		if err != nil {
-			error_helper.HTML(http.StatusInternalServerError, err, c)
-			return
-		}
-
-		c.HTML(http.StatusOK, "settings.html", page{
-			Project: project,
-		})
+	project, err := database.GetProject(projectId)
+	if err != nil {
+		error_helper.HTML(http.StatusInternalServerError, err, c)
+		return
 	}
+
+	c.HTML(http.StatusOK, "settings.html", page{
+		Project: project,
+	})
 }

@@ -7,8 +7,13 @@
     <div class="container">
         {{template "nav.html"}}
         <h3>Paramètres</h3>
+        <form>
+            <h6>Renommer le Trikount</h6>
+            <input type="text" id="name" name="name" placeholder="{{.Project.Name}}" required>
+            <button type="submit">Renommer</button>
+        </form>
         <form onsubmit="return confirm('Êtes-vous sur de vouloir supprimer définitivement {{.Project.Name}} ?');">
-            <button class="danger-button" type="submit" name="delete" value="true">Supprimer ce Trikount</button>
+            <button class="danger-button" type="submit" name="delete" value="on">Supprimer ce Trikount</button>
         </form>
     </div>
 </body>

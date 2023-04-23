@@ -52,8 +52,12 @@ func GetProject(id string) (*models.Project, error) {
 	return &project, nil
 }
 
-type SqlStringArray struct {
-	V []string
+func RenameProject(projectId string, name string) error {
+	_, err := db.Exec(`UPDATE projects SET name = $1 WHERE id = $2`, name, projectId)
+	if err != nil {
+		return errors.Wrap(err, "failed to rename project")
+	}
+	return nil
 }
 
 func GetProjects(ids []string) ([]*models.Project, error) {

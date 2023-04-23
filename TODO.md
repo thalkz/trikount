@@ -23,8 +23,8 @@
 
 - [x] fix: Fix missing favicon.ico
 - [x] feat: Improve UI (mobile & desktop)
-- [ ] feat: Delete expense
-- [ ] feat: See expense date in details page
+- [x] feat: Delete expense
+- [x] feat: See expense date in details page
 - [ ] feat: Rename a Trikount
 - [ ] feat: Show cost per person
 - [x] chore: Fix typos in wording
@@ -35,6 +35,7 @@
 - [ ] feat: By default, all participants should be selected in a new expense
 - [ ] bug: It's impossible to add decimals oin iPhone (cannot input a comma)
 - [ ] bug: It's possible to open expenses from other projects by editing the url
+- [ ] bug: It's possible to add an expense without specifying a "paid_by"
 
 ## Backlog
 

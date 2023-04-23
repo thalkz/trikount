@@ -1,6 +1,7 @@
 package page
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -19,10 +20,22 @@ func Expense() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		expenseIdStr := c.Param("expenseId")
 		projectId := c.Param("projectId")
+		delete := c.Query("delete")
 
 		expenseId, err := strconv.Atoi(expenseIdStr)
 		if err != nil {
 			error_helper.HTML(http.StatusBadRequest, err, c)
+			return
+		}
+
+		if delete == "on" {
+			err = database.DeleteExpense(expenseId)
+			if err != nil {
+				error_helper.HTML(http.StatusInternalServerError, err, c)
+				return
+			}
+
+			c.Redirect(http.StatusFound, fmt.Sprintf("/t/%s/expenses", projectId))
 			return
 		}
 

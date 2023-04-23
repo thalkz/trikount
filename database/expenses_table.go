@@ -59,6 +59,14 @@ func EditExpense(projectId string, expenseId int, title string, amount float64, 
 	return nil
 }
 
+func DeleteExpense(expenseId int) error {
+	_, err := db.Exec("DELETE FROM expenses WHERE id = ?", expenseId)
+	if err != nil {
+		return errors.Wrap(err, "failed to delete expense")
+	}
+	return nil
+}
+
 func GetExpenses(projectId string) ([]*models.Expense, error) {
 	rows, err := db.Query(`SELECT expenses.id, expenses.title, expenses.amount, members.id, members.name, expenses.is_transfer, expenses.updated_at
 		FROM expenses 

@@ -1,14 +1,29 @@
-<br/>
+<br />
 <ul id="nav" class="navbar-list">
     <a id="nav-balance">[ home ]</a>
     <a id="nav-expense">[ dépenses ]</a>
     <a id="nav-settings">[ paramètres ]</a>
+    <div class="tooltip">
+        <span class="tooltiptext" id="share-tooltip">Copy to clipboard</span>
+        <a id="nav-share" onclick="onClick()" onmouseout="onMouseOut()">[ partager ]</a>
+    </div>
 
     <script>
         var projectId = window.location.pathname.split("/")[2]
         document.getElementById("nav-balance").href = `/t/${projectId}`;
         document.getElementById("nav-expense").href = `/t/${projectId}/expenses`;
-        document.getElementById("nav-settings").href = `/t/${projectId}/settings`; 
+        document.getElementById("nav-settings").href = `/t/${projectId}/settings`;
+        const shareUrl = `https://trikount.com/t/${projectId}`
+        document.getElementById("share-tooltip").innerText = shareUrl
+
+        function onClick() {
+            navigator.clipboard.writeText(shareUrl);
+            document.getElementById("share-tooltip").innerText = "Copié !"
+        }
+
+        function onMouseOut() {
+            document.getElementById("share-tooltip").innerText = shareUrl
+        }
     </script>
 </ul>
 <br />

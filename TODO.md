@@ -26,11 +26,11 @@
 - [x] feat: Delete expense
 - [x] feat: See expense date in details page
 - [x] feat: Rename a Trikount
-- [ ] feat: Show cost per person
+- [x] feat: Show cost per person
 - [x] chore: Fix typos in wording
 - [ ] bug: Values are sometimes displayed with many decimals (ex: 2.6666666666)
 - [ ] feat: Make pages visually different (helps to navigate)
-- [ ] feat: Create a dedicated "share" button
+- [x] feat: Create a dedicated "share" button
 - [x] feat: Show the most recent expense first
 - [x] feat: By default, all participants should be selected in a new expense
 - [x] bug: It's impossible to add decimals on iPhone (cannot input a comma)

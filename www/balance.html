@@ -28,13 +28,17 @@
         <br />
         <ul>
             {{range .Balance}}
-            {{if eq .Balance 0.0}}
-            <li>{{.Name}}: <b>{{.FormattedBalance}}</b></li>
-            {{else if gt .Balance 0.0}}
-            <li>{{.Name}}: <b style="color:green;">{{.FormattedBalance}}</b></li>
-            {{else}}
-            <li>{{.Name}}: <b style="color:red;">{{.FormattedBalance}}</b></li>
-            {{end}}
+            <li>
+                {{.Name}}:
+                {{if eq .Balance 0.0}}
+                <b>{{.FormattedBalance}}</b>
+                {{else if gt .Balance 0.0}}
+                <b style="color:green;">{{.FormattedBalance}}</b>
+                {{else}}
+                <b style="color:red;">{{.FormattedBalance}}</b>
+                {{end}}
+                • <small>total dépensé: {{.FormattedSpent}}</small>
+            </li>
             {{end}}
         </ul>
 

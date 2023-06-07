@@ -29,3 +29,16 @@ func GetMembers(projectId string) ([]*models.Member, error) {
 	}
 	return members, nil
 }
+
+func GetMemberByName(projectId string, name string) (*models.Member, error) {
+	row := db.QueryRow(`SELECT id, name FROM members WHERE project_id = $1 AND name = $2`, projectId, name)
+	if err := row.Err(); err != nil {
+		return nil, errors.Wrapf(err, "failed to get member by name %v", name)
+	}
+	var member models.Member
+	err := row.Scan(&member.Id, &member.Name)
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to scan member")
+	}
+	return &member, nil
+}

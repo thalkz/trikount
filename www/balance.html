@@ -7,12 +7,29 @@
     <div class="container">
         {{template "nav.html"}}
 
-        {{if .ShowTutorial}}
+        {{if and .ShowTutorial (not .ChooseUsername)}}
         <div id="tutorial-container">
             <p>Sauvegarde et partage le lien de ce trikount quelque-part pour pouvoir y retourner facilement.<br />
                 Lien du trikount à conserver: <code id="share-link">trikount.com/t/{{.ProjectId}}</code></p>
             <button onclick="location.href='?show_tutorial=false'">
                 C'est bon !
+            </button>
+        </div>
+        <br />
+        {{end}}
+
+        {{if .ChooseUsername}}
+        <div id="tutorial-container">
+            <h5>👋 Bienvenue ! Qui est tu ?</h5>
+            {{range .Balance}}
+            <button onclick="location.href='?current_username={{.Name}}'">
+                {{.Name}}
+            </button>
+            {{end}}
+            <br /><br />
+            <p>Tu n'est pas sur cette liste ? Ajoute-toi sur le Trikount</p>
+            <button onclick="location.href='/t/{{$.ProjectId}}/members/add'">
+                M'ajouter à ce Trikount
             </button>
         </div>
         <br />

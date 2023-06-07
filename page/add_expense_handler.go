@@ -75,12 +75,25 @@ func handleRenderAddExpensePage(c *gin.Context, projectId string, members []*mod
 		Expense *models.Expense
 	}
 
+	var paidBy models.Member
+	currentUsername, _ := c.Cookie(projectId)
+	if currentUsername != "" {
+		paidByPtr, err := database.GetMemberByName(projectId, currentUsername)
+		if err != nil {
+			error_helper.HTML(http.StatusInternalServerError, err, c)
+			return
+		}
+		if paidByPtr != nil {
+			paidBy = *paidByPtr
+		}
+	}
+
 	c.HTML(http.StatusOK, "edit_expense.html", page{
 		IsEdit: false,
 		Expense: &models.Expense{
 			Title:      "",
 			Amount:     0,
-			PaidBy:     models.Member{},
+			PaidBy:     paidBy,
 			SpentBy:    members,
 			IsTransfer: false,
 		},

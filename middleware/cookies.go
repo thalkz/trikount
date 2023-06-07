@@ -32,3 +32,14 @@ func SetProjectCookie() gin.HandlerFunc {
 		c.SetCookie("project_ids", cookie, cookieExpireSeconds, "/", "", false, true)
 	}
 }
+
+func SetCurrentUsernameCookie() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		projectId := c.Param("projectId")
+		username := c.Query("current_username")
+		if username != "" {
+			log.Printf("DEBUG: Setting cookie %v=%v", projectId, username)
+			c.SetCookie(projectId, username, cookieExpireSeconds, "/", "", false, true)
+		}
+	}
+}

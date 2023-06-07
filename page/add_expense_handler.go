@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/pkg/errors"
 	"github.com/thalkz/trikount/database"
 	"github.com/thalkz/trikount/error_helper"
 	"github.com/thalkz/trikount/models"
@@ -34,9 +35,21 @@ func AddExpense() gin.HandlerFunc {
 func handleAddExpense(c *gin.Context, projectId string, members []*models.Member) {
 	title := c.Query("name")
 	amountStr := c.Query("amount")
-	amount, _ := strconv.ParseFloat(amountStr, 32)
+	amount, err := strconv.ParseFloat(amountStr, 32)
+	if err != nil {
+		err = errors.Wrap(err, "failed to parse amount")
+		error_helper.HTML(http.StatusInternalServerError, err, c)
+		return
+	}
+
 	paidByStr := c.Query("paid_by")
-	paidBy, _ := strconv.Atoi(paidByStr)
+	paidBy, err := strconv.Atoi(paidByStr)
+	if err != nil {
+		err = errors.Wrap(err, "failed to parse paid_by")
+		error_helper.HTML(http.StatusInternalServerError, err, c)
+		return
+	}
+
 	isTransfer := c.Query("is_transfer") == "on"
 
 	var spentBy []int
@@ -47,7 +60,7 @@ func handleAddExpense(c *gin.Context, projectId string, members []*models.Member
 	}
 
 	now := time.Now()
-	err := database.AddExpense(projectId, title, amount, paidBy, spentBy, isTransfer, now)
+	err = database.AddExpense(projectId, title, amount, paidBy, spentBy, isTransfer, now)
 	if err != nil {
 		error_helper.HTML(http.StatusInternalServerError, err, c)
 		return

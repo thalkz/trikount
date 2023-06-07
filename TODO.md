@@ -34,9 +34,10 @@
 - [x] feat: Show the most recent expense first
 - [x] feat: By default, all participants should be selected in a new expense
 - [x] bug: It's impossible to add decimals on iPhone (cannot input a comma)
-- [ ] bug: It's possible to open expenses from other projects by editing the url
+- [x] bug: It's possible to open expenses from other projects by editing the url
 - [x] bug: It's possible to add an expense without specifying a "paid_by"
 - [ ] feat: Ask which is current user + set a cookie
+- [ ] bug: Refunds are not pre-filled
 
 ## Backlog
 

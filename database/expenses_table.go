@@ -33,8 +33,10 @@ func EditExpense(projectId string, expenseId int, title string, amount float64, 
 	}
 	defer tx.Rollback()
 
-	_, err = tx.Exec(`UPDATE expenses SET title = ?, amount = ?, paid_by = ?, is_transfer = ?, updated_at = ? WHERE id = ?`,
-		title, amount, paidBy, isTransfer, updatedAt.Format(time.UnixDate), expenseId)
+	_, err = tx.Exec(`UPDATE expenses 
+		SET title = ?, amount = ?, paid_by = ?, is_transfer = ?, updated_at = ? 
+		WHERE id = ? AND project_id = ?`,
+		title, amount, paidBy, isTransfer, updatedAt.Format(time.UnixDate), expenseId, projectId)
 	if err != nil {
 		return errors.Wrap(err, "failed to update expense")
 	}
@@ -59,8 +61,8 @@ func EditExpense(projectId string, expenseId int, title string, amount float64, 
 	return nil
 }
 
-func DeleteExpense(expenseId int) error {
-	_, err := db.Exec("DELETE FROM expenses WHERE id = ?", expenseId)
+func DeleteExpense(projectId string, expenseId int) error {
+	_, err := db.Exec("DELETE FROM expenses WHERE id = ? AND project_id = ?", expenseId, projectId)
 	if err != nil {
 		return errors.Wrap(err, "failed to delete expense")
 	}
@@ -109,11 +111,11 @@ func GetTotalSpent(projectId string) (float64, error) {
 	return total, nil
 }
 
-func GetExpense(id int) (*models.Expense, error) {
+func GetExpense(projectId string, id int) (*models.Expense, error) {
 	row := db.QueryRow(`SELECT expenses.id, expenses.title, expenses.amount, members.id, members.name, expenses.is_transfer, expenses.updated_at
 		FROM expenses 
 		JOIN members ON expenses.paid_by = members.id
-		WHERE expenses.id = $1`, id)
+		WHERE expenses.id = $1 AND expenses.project_id = $2`, id, projectId)
 
 	var expense models.Expense
 	var updatedAtStr string

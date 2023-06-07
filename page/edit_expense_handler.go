@@ -31,7 +31,7 @@ func EditExpense() gin.HandlerFunc {
 		}
 
 		if title == "" {
-			handleRenderEditExpensePage(c, expenseId, members)
+			handleRenderEditExpensePage(c, projectId, expenseId, members)
 		} else {
 			handleEditExpense(c, projectId, members, expenseId, title)
 		}
@@ -71,14 +71,14 @@ func handleEditExpense(c *gin.Context, projectId string, members []*models.Membe
 	c.Redirect(http.StatusFound, fmt.Sprintf("/t/%s", projectId))
 }
 
-func handleRenderEditExpensePage(c *gin.Context, expenseId int, members []*models.Member) {
+func handleRenderEditExpensePage(c *gin.Context, projectId string, expenseId int, members []*models.Member) {
 	type page struct {
 		IsEdit  bool
 		Members []*models.Member
 		Expense *models.Expense
 	}
 
-	expense, err := database.GetExpense(expenseId)
+	expense, err := database.GetExpense(projectId, expenseId)
 	if err != nil {
 		error_helper.HTML(http.StatusInternalServerError, err, c)
 		return

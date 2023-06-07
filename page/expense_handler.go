@@ -32,7 +32,7 @@ func Expense() gin.HandlerFunc {
 }
 
 func handleDeleteExpense(c *gin.Context, projectId string, expenseId int) {
-	err := database.DeleteExpense(expenseId)
+	err := database.DeleteExpense(projectId, expenseId)
 	if err != nil {
 		error_helper.HTML(http.StatusInternalServerError, err, c)
 		return
@@ -47,7 +47,7 @@ func handleRenderExpensePage(c *gin.Context, projectId string, expenseId int) {
 		Expense   *models.Expense
 	}
 
-	expense, err := database.GetExpense(expenseId)
+	expense, err := database.GetExpense(projectId, expenseId)
 	if err != nil {
 		error_helper.HTML(http.StatusInternalServerError, err, c)
 		return

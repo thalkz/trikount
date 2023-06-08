@@ -38,9 +38,9 @@
 - [x] bug: It's possible to add an expense without specifying a "paid_by"
 - [x] feat: Ask which is current user + set a cookie
 - [ ] bug: Refunds are not pre-filled
-- [ ] feat: Copy link in tutorial before closing
-- [ ] feat: Move "Ajouter un participant" to Settings
-- [ ] feat: Add disconnect button from settings
+- [x] feat: Copy link in tutorial before closing
+- [x] feat: Move "Ajouter un participant" to Settings
+- [x] feat: Add disconnect button from settings
 
 ## Backlog
 

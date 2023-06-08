@@ -9,11 +9,25 @@
 
         {{if and .ShowTutorial (not .ChooseUsername)}}
         <div id="tutorial-container">
-            <p>Sauvegarde et partage le lien de ce trikount quelque-part pour pouvoir y retourner facilement.<br />
-                Lien du trikount à conserver: <code id="share-link">trikount.com/t/{{.ProjectId}}</code></p>
+            <p>Sauvegarde et partage le lien de ce trikount quelque-part pour pouvoir y retourner
+                facilement.
+            </p>
+            <code id="share-link">https://trikount.com/t/{{.ProjectId}}</code>
+            <button id="copy-button" onclick="onClick()" onmouseout="onMouseOut()">Copier</button>
+            <br />
             <button onclick="location.href='?show_tutorial=false'">
-                C'est bon !
+                C'est bon, j'ai partagé le lien
             </button>
+
+            <script>
+                const tutoShareUrl = "https://trikount.com/t/{{.ProjectId}}";
+                const button = document.getElementById("copy-button");
+
+                function onClick() {
+                    navigator.clipboard.writeText(tutoShareUrl);
+                    button.innerText = "Lien copié ✔"
+                }
+            </script>
         </div>
         <br />
         {{end}}

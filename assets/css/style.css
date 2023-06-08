@@ -59,7 +59,7 @@ label {
 
 .tooltip .tooltiptext {
     visibility: hidden;
-    width: 240px;
+    width: 180px;
     background-color: #555;
     color: #fff;
     text-align: center;
@@ -69,7 +69,7 @@ label {
     z-index: 1;
     top: 150%;
     left: 50%;
-    margin-left: -120px;
+    margin-left: -95px;
     opacity: 0;
     transition: opacity 0.3s;
 }

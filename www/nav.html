@@ -4,7 +4,7 @@
     <a id="nav-expense">[ dépenses ]</a>
     <a id="nav-settings">[ paramètres ]</a>
     <div class="tooltip">
-        <span class="tooltiptext" id="share-tooltip">Copy to clipboard</span>
+        <span class="tooltiptext" id="share-tooltip"></span>
         <a id="nav-share" onclick="onClick()" onmouseout="onMouseOut()">[ partager ]</a>
     </div>
 
@@ -14,15 +14,12 @@
         document.getElementById("nav-expense").href = `/t/${projectId}/expenses`;
         document.getElementById("nav-settings").href = `/t/${projectId}/settings`;
         const shareUrl = `https://trikount.com/t/${projectId}`
-        document.getElementById("share-tooltip").innerText = shareUrl
+        const tooltip = document.getElementById("share-tooltip")
+        tooltip.innerText = "Copier le lien"
 
         function onClick() {
             navigator.clipboard.writeText(shareUrl);
-            document.getElementById("share-tooltip").innerText = "Copié !"
-        }
-
-        function onMouseOut() {
-            document.getElementById("share-tooltip").innerText = shareUrl
+            tooltip.innerText = "Lien copié ✅"
         }
     </script>
 </ul>

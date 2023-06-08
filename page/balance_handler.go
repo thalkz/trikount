@@ -70,7 +70,11 @@ func shouldShowTutorial(c *gin.Context) bool {
 }
 
 func shouldChooseUsername(c *gin.Context, projectId string, members []*models.MemberBalance) bool {
-	username := c.Query("current_username")
+	username, exists := c.GetQuery("current_username")
+	if exists && username == "" {
+		return true
+	}
+
 	for _, member := range members {
 		if member.Name == username {
 			return false

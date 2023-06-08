@@ -10,7 +10,13 @@
             <h5>Participants</h5>
             <ul>
                 {{range .Members}}
-                <li>{{.Name}}{{if eq .Name $.CurrentUsername}} <b>(vous)</b>{{end}}</li>
+                <li>{{.Name}}
+                    {{if eq .Name $.CurrentUsername}}
+                    <a href='/t/{{$.Project.Id}}/?current_username='>
+                        [ Se déconnecter ]
+                    </a>
+                    {{end}}
+                </li>
                 {{end}}
             </ul>
             <button onclick="location.href='/t/{{.Project.Id}}/members/add'">

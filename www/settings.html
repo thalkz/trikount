@@ -6,15 +6,34 @@
 <body>
     <div class="container">
         {{template "nav.html"}}
-        <h3>Paramètres</h3>
-        <form>
-            <h6>Renommer le Trikount</h6>
-            <input type="text" id="name" name="name" placeholder="{{.Project.Name}}" required>
-            <button type="submit">Renommer</button>
-        </form>
-        <form onsubmit="return confirm('Êtes-vous sur de vouloir supprimer définitivement {{.Project.Name}} ?');">
-            <button class="danger-button" type="submit" name="delete" value="on">Supprimer ce Trikount</button>
-        </form>
+        <div class="rounded-container">
+            <h5>Participants</h5>
+            <ul>
+                {{range .Members}}
+                <li>{{.Name}}{{if eq .Name $.CurrentUsername}} <b>(vous)</b>{{end}}</li>
+                {{end}}
+            </ul>
+            <button onclick="location.href='/t/{{.Project.Id}}/members/add'">
+                Ajouter un participant
+            </button>
+        </div>
+        <br />
+        <div class="rounded-container">
+            <h5>Renommer le Trikount</h5>
+            <form>
+                <input type="text" id="name" name="name" placeholder="{{.Project.Name}}" required>
+                <button type="submit">Renommer</button>
+            </form>
+        </div>
+        <br />
+        <div class="rounded-container">
+            <h5>Suppression</h5>
+            <p>Supprimer un Trikount est définitif, vous ne pourrez pas le récupérer après l'avoir supprimé.</p>
+            <form onsubmit="return confirm('Êtes-vous sur de vouloir supprimer définitivement {{.Project.Name}} ?');">
+                <button class="danger-button" type="submit" name="delete" value="on">Supprimer ce Trikount</button>
+            </form>
+        </div>
+        <br />
     </div>
 </body>
 

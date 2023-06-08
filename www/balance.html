@@ -59,14 +59,9 @@
             {{end}}
         </ul>
 
-        <button onclick="location.href='/t/{{$.ProjectId}}/members/add'">
-            Ajouter un participant
-        </button>
-
         {{if .Transfers}}
-        <br /><br />
         <div class="rounded-container">
-            <p>Comment équilibrer ?</p>
+            <h5>Comment équilibrer ?</h5>
             {{range .Transfers}}
             <p>
                 {{.From.Name}} doit <b>{{.FormattedAmount}}</b> à {{.To.Name}}

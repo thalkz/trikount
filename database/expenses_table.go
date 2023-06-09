@@ -62,10 +62,27 @@ func EditExpense(projectId string, expenseId int, title string, amount float64, 
 }
 
 func DeleteExpense(projectId string, expenseId int) error {
-	_, err := db.Exec("DELETE FROM expenses WHERE id = ? AND project_id = ?", expenseId, projectId)
+	tx, err := db.Begin()
 	if err != nil {
-		return errors.Wrap(err, "failed to delete expense")
+		return errors.Wrap(err, "failed to begin tx")
 	}
+	defer tx.Rollback()
+
+	_, err = tx.Exec("DELETE FROM expenses WHERE id = ? AND project_id = ?", expenseId, projectId)
+	if err != nil {
+		return errors.Wrap(err, "failed to delete from expenses")
+	}
+
+	_, err = tx.Exec("DELETE FROM spent_by WHERE expense_id = ?", expenseId)
+	if err != nil {
+		return errors.Wrap(err, "failed to delete from spent_by")
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		return errors.Wrap(err, "failed to commit tx")
+	}
+
 	return nil
 }
 

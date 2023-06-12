@@ -177,7 +177,7 @@ func GetExpense(projectId string, id int) (*models.Expense, error) {
 
 func GetBalance(projectId string) (*models.Balance, error) {
 	rows, err := db.Query(`
-	SELECT members.id, members.name, COALESCE(v_paid_balance.amount, 0) paid, COALESCE(v_spent_balance.amount, 0) spent 
+	SELECT members.id, members.name, COALESCE(v_paid_balance.amount, 0) paid, COALESCE(v_spent_balance.amount, 0) spent, COALESCE(v_spent_balance.no_transfer_amount, 0) no_transfer_spent 
 		FROM members
   			LEFT JOIN v_paid_balance ON members.id = v_paid_balance.member_id
   			LEFT JOIN v_spent_balance ON members.id = v_spent_balance.member_id
@@ -189,7 +189,7 @@ func GetBalance(projectId string) (*models.Balance, error) {
 	var balance []*models.MemberBalance
 	for rows.Next() {
 		var memberBalance models.MemberBalance
-		err = rows.Scan(&memberBalance.Id, &memberBalance.Name, &memberBalance.Paid, &memberBalance.Spent)
+		err = rows.Scan(&memberBalance.Id, &memberBalance.Name, &memberBalance.Paid, &memberBalance.Spent, &memberBalance.NoTransferSpent)
 		if err != nil {
 			return nil, errors.Wrap(err, "failed to scan row")
 		}

@@ -42,7 +42,7 @@
 - [x] bug: Values are sometimes displayed with many decimals (ex: 2.6666666666)
 - [x] fix: Use userId instead of username for identification
 - [ ] feat: Make pages visually different (helps to navigate)
-- [ ] bug: Refunds are taken into account in "total spent per member"
+- [x] bug: Refunds are taken into account in "total spent per member"
 
 ## Backlog
 

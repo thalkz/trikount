@@ -4,8 +4,9 @@ import "github.com/thalkz/trikount/format"
 
 type MemberBalance struct {
 	Member
-	Spent float64
-	Paid  float64
+	Spent           float64
+	NoTransferSpent float64
+	Paid            float64
 }
 
 func (t MemberBalance) String() string {
@@ -22,6 +23,10 @@ func (b MemberBalance) FormattedBalance() string {
 
 func (b MemberBalance) FormattedSpent() string {
 	return format.ToEuro(b.Spent)
+}
+
+func (b MemberBalance) FormattedNoTransferSpent() string {
+	return format.ToEuro(b.NoTransferSpent)
 }
 
 func (b MemberBalance) FormattedPaid() string {

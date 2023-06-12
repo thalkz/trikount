@@ -11,8 +11,8 @@
             <ul>
                 {{range .Members}}
                 <li>{{.Name}}
-                    {{if eq .Name $.CurrentUsername}}
-                    <a href='/t/{{$.Project.Id}}/?current_username='>
+                    {{if eq .Id $.UserId}}
+                    <a href='/t/{{$.Project.Id}}/?user_id='>
                         [ Se déconnecter ]
                     </a>
                     {{end}}

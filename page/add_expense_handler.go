@@ -96,7 +96,7 @@ func handleRenderAddExpensePage(c *gin.Context, projectId string, title string, 
 
 	paidByStr := c.Query("paid_by")
 	paidById, _ := strconv.Atoi(paidByStr)
-	currentUsername, _ := cookies.GetCurrentUsername(c, projectId)
+	userId, _ := cookies.GetUserId(c, projectId)
 	paidByMember := &models.Member{}
 	if paidById > 0 {
 		var err error
@@ -105,9 +105,9 @@ func handleRenderAddExpensePage(c *gin.Context, projectId string, title string, 
 			error_helper.HTML(http.StatusInternalServerError, err, c)
 			return
 		}
-	} else if currentUsername != "" {
+	} else if userId != -1 {
 		var err error
-		paidByMember, err = database.GetMemberByName(projectId, currentUsername)
+		paidByMember, err = database.GetMemberById(projectId, userId)
 		if err != nil {
 			error_helper.HTML(http.StatusInternalServerError, err, c)
 			return

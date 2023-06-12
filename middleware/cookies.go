@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/thalkz/trikount/cookies"
 )
 
 const cookieExpireSeconds = 60 * 60 * 24 * 365 // 1 Year
@@ -28,18 +29,17 @@ func SetProjectCookie() gin.HandlerFunc {
 			cleaned = append(cleaned, id)
 		}
 		cookie = strings.Join(cleaned, ",")
-		log.Printf("DEBUG: Setting cookie project_ids=%v", cookie)
+		log.Printf("DEBUG: Setting cookie project_ids=%v\n", cookie)
 		c.SetCookie("project_ids", cookie, cookieExpireSeconds, "/", "", false, true)
 	}
 }
 
-func SetCurrentUsernameCookie() gin.HandlerFunc {
+func SetUserIdCookie() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		projectId := c.Param("projectId")
-		username, exists := c.GetQuery("current_username")
+		userIdStr, exists := c.GetQuery("user_id")
 		if exists {
-			log.Printf("DEBUG: Setting cookie %v=%v", projectId, username)
-			c.SetCookie(projectId, username, cookieExpireSeconds, "/", "", false, true)
+			projectId := c.Param("projectId")
+			cookies.SetUserId(c, projectId, userIdStr)
 		}
 	}
 }

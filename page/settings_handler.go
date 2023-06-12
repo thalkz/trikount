@@ -43,9 +43,9 @@ func handleRenameProject(c *gin.Context, projectId string, projectName string) {
 
 func renderSettingsPage(c *gin.Context, projectId string) {
 	type page struct {
-		Project         *models.Project
-		Members         []*models.Member
-		CurrentUsername string
+		Project *models.Project
+		Members []*models.Member
+		UserId  int
 	}
 
 	project, err := database.GetProject(projectId)
@@ -60,11 +60,11 @@ func renderSettingsPage(c *gin.Context, projectId string) {
 		return
 	}
 
-	currentUsername, _ := cookies.GetCurrentUsername(c, projectId)
+	userId, _ := cookies.GetUserId(c, projectId)
 
 	c.HTML(http.StatusOK, "settings.html", page{
-		Project:         project,
-		Members:         members,
-		CurrentUsername: currentUsername,
+		Project: project,
+		Members: members,
+		UserId:  userId,
 	})
 }

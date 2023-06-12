@@ -3,6 +3,7 @@ package page
 import (
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/thalkz/trikount/cookies"
@@ -71,24 +72,26 @@ func shouldShowTutorial(c *gin.Context) bool {
 }
 
 func shouldChooseUsername(c *gin.Context, projectId string, members []*models.MemberBalance) bool {
-	username, exists := c.GetQuery("current_username")
-	if exists && username == "" {
+	queryUserIdStr, exists := c.GetQuery("user_id")
+	if exists && queryUserIdStr == "" {
 		return true
 	}
 
+	queryUserId, _ := strconv.Atoi(queryUserIdStr)
+
 	for _, member := range members {
-		if member.Name == username {
+		if member.Id == queryUserId {
 			return false
 		}
 	}
 
-	name, err := cookies.GetCurrentUsername(c, projectId)
+	userId, err := cookies.GetUserId(c, projectId)
 	if err != nil {
 		log.Printf("DEBUG: failed to get cookie %s: %s", projectId, err)
 		return true
 	}
 	for _, member := range members {
-		if member.Name == name {
+		if member.Id == userId {
 			return false
 		}
 	}

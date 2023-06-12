@@ -36,7 +36,7 @@
         <div id="tutorial-container">
             <h5>👋 Bienvenue ! Qui est tu ?</h5>
             {{range .Balance}}
-            <button onclick="location.href='?current_username={{.Name}}'">
+            <button onclick="location.href='?user_id={{.Id}}'">
                 {{.Name}}
             </button>
             {{end}}

@@ -8,6 +8,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
+	"github.com/thalkz/trikount/cookies"
 	"github.com/thalkz/trikount/database"
 	"github.com/thalkz/trikount/error_helper"
 	"github.com/thalkz/trikount/models"
@@ -95,7 +96,7 @@ func handleRenderAddExpensePage(c *gin.Context, projectId string, title string, 
 
 	paidByStr := c.Query("paid_by")
 	paidById, _ := strconv.Atoi(paidByStr)
-	currentUsername, _ := c.Cookie(projectId)
+	currentUsername, _ := cookies.GetCurrentUsername(c, projectId)
 	paidByMember := &models.Member{}
 	if paidById > 0 {
 		var err error

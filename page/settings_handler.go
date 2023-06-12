@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/thalkz/trikount/cookies"
 	"github.com/thalkz/trikount/database"
 	"github.com/thalkz/trikount/error_helper"
 	"github.com/thalkz/trikount/models"
@@ -59,7 +60,7 @@ func renderSettingsPage(c *gin.Context, projectId string) {
 		return
 	}
 
-	currentUsername, _ := c.Cookie(projectId)
+	currentUsername, _ := cookies.GetCurrentUsername(c, projectId)
 
 	c.HTML(http.StatusOK, "settings.html", page{
 		Project:         project,

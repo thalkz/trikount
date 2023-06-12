@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/thalkz/trikount/cookies"
 	"github.com/thalkz/trikount/database"
 	"github.com/thalkz/trikount/error_helper"
 	"github.com/thalkz/trikount/format"
@@ -81,7 +82,7 @@ func shouldChooseUsername(c *gin.Context, projectId string, members []*models.Me
 		}
 	}
 
-	name, err := c.Cookie(projectId)
+	name, err := cookies.GetCurrentUsername(c, projectId)
 	if err != nil {
 		log.Printf("DEBUG: failed to get cookie %s: %s", projectId, err)
 		return true

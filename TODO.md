@@ -44,7 +44,7 @@
 - [x] bug: Refunds are taken into account in "total spent per member"
 
 ## Milestone F - Cleanup & UI
-- [ ] chore: Write a README.md
+- [x] chore: Write a README.md
 - [ ] chore: Refactor the project
 - [ ] feat: Make pages visually different (helps to navigate)
 - [x] bug: Editing an expense shows too many digits

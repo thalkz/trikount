@@ -45,6 +45,7 @@
 
 ## Milestone F - Cleanup & UI
 - [x] chore: Write a README.md
+- [x] chore: Add a License
 - [ ] chore: Refactor the project
 - [ ] feat: Make pages visually different (helps to navigate)
 - [x] bug: Editing an expense shows too many digits

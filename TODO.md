@@ -54,6 +54,7 @@
 - [ ] feat: Highlight my information in balance.html
 - [ ] feat: Rework UI with a Neobrutalism style
 - [ ] feat: Validate user input (project, expense, member)
+- [ ] feat: Create an "about" page
 
 ## Backlog
 

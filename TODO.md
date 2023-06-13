@@ -47,7 +47,7 @@
 - [ ] chore: Write a README.md
 - [ ] chore: Refactor the project
 - [ ] feat: Make pages visually different (helps to navigate)
-- [ ] bug: Editing an expense shows too many digits
+- [x] bug: Editing an expense shows too many digits
 - [ ] feat: Show how much each expense impacts your balance
 - [ ] feat: Add notifications for each added expense/refund
 - [ ] feat: Highlight my information in balance.html

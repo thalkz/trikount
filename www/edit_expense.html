@@ -18,7 +18,8 @@
                 value="{{.Expense.Title}}" required>
             Coût en euros:
             <input class="u-full-width" type="number" min="0" step="0.01" id="amount" name="amount" placeholder="0"
-                value="{{if .Expense.Amount}}{{.Expense.Amount}}{{else}}{{end}}" inputmode="decimal" required>
+                value='{{if .Expense.Amount}}{{printf "%.2f"  .Expense.Amount}}{{else}}{{end}}' inputmode="decimal"
+                required>
             <br />
             <br />
             Payé par

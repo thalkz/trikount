@@ -19,7 +19,7 @@
 - [x] feat: Mark some expenses as refunds
 - [x] feat: Create a 1-click refund button
 
-## Milestone E - Improved UI
+## Milestone E - Production Ready
 
 - [x] fix: Fix missing favicon.ico
 - [x] feat: Improve UI (mobile & desktop)
@@ -41,14 +41,23 @@
 - [x] feat: Add disconnect button from settings
 - [x] bug: Values are sometimes displayed with many decimals (ex: 2.6666666666)
 - [x] fix: Use userId instead of username for identification
-- [ ] feat: Make pages visually different (helps to navigate)
 - [x] bug: Refunds are taken into account in "total spent per member"
+
+## Milestone F - Cleanup & UI
+- [ ] chore: Write a README.md
+- [ ] chore: Refactor the project
+- [ ] feat: Make pages visually different (helps to navigate)
+- [ ] bug: Editing an expense shows too many digits
+- [ ] feat: Show how much each expense impacts your balance
+- [ ] feat: Add notifications for each added expense/refund
+- [ ] feat: Highlight my information in balance.html
+- [ ] feat: Rework UI with a Neobrutalism style
+- [ ] feat: Validate user input (project, expense, member)
 
 ## Backlog
 
-- [ ] feat: Admin script for listing projects and members
 - [ ] chore: Add unit tests
-- [ ] chore: Write a README.md
-- [ ] feat: Validate user input (project, expense, member)
+- [ ] feat: Add "parts" to expenses
+- [ ] feat: Admin script for listing projects and members
 - [ ] feat: Integrate Lydia for refunds
 - [ ] feat: Create an account with Webauthn (webauthn.io)

@@ -26,7 +26,7 @@ func Expense() gin.HandlerFunc {
 		if delete == "on" {
 			handleDeleteExpense(c, projectId, expenseId)
 		} else {
-			handleRenderExpensePage(c, projectId, expenseId)
+			renderExpensePage(c, projectId, expenseId)
 		}
 	}
 }
@@ -41,7 +41,7 @@ func handleDeleteExpense(c *gin.Context, projectId string, expenseId int) {
 	c.Redirect(http.StatusFound, fmt.Sprintf("/t/%s/expenses", projectId))
 }
 
-func handleRenderExpensePage(c *gin.Context, projectId string, expenseId int) {
+func renderExpensePage(c *gin.Context, projectId string, expenseId int) {
 	type page struct {
 		ProjectId string
 		Expense   *models.Expense

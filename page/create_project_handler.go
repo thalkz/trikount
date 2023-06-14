@@ -7,6 +7,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
+	"github.com/thalkz/trikount/cookies"
 	"github.com/thalkz/trikount/database"
 	"github.com/thalkz/trikount/error_helper"
 	"github.com/thalkz/trikount/hash"
@@ -16,10 +17,10 @@ func CreateProject() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		projectName := c.Query("name")
 
-		if projectName == "" {
-			handleRenderCreateProjectPage(c)
-		} else {
+		if projectName != "" {
 			handleCreateProject(c, projectName)
+		} else {
+			renderCreateProjectPage(c)
 		}
 	}
 }
@@ -37,17 +38,12 @@ func handleCreateProject(c *gin.Context, projectName string) {
 		return
 	}
 
-	setShowTutorialCookie(c)
+	cookies.SetShowTutorial(c)
 	c.Redirect(http.StatusFound, fmt.Sprintf("/t/%s/members/add", projectId))
 }
 
-func handleRenderCreateProjectPage(c *gin.Context) {
+func renderCreateProjectPage(c *gin.Context) {
 	c.HTML(http.StatusOK, "create_project.html", nil)
-}
-
-func setShowTutorialCookie(c *gin.Context) {
-	const cookieExpireSeconds = 60 * 60 * 24
-	c.SetCookie("show_tutorial", "true", cookieExpireSeconds, "/", "", false, true)
 }
 
 func findAvailableProjectId() (string, error) {

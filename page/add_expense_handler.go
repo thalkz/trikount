@@ -17,6 +17,7 @@ import (
 func AddExpense() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		projectId := c.Param("projectId")
+
 		members, err := database.GetMembers(projectId)
 		if err != nil {
 			error_helper.HTML(http.StatusInternalServerError, err, c)
@@ -37,7 +38,7 @@ func AddExpense() gin.HandlerFunc {
 		if save == "on" {
 			handleAddExpense(c, projectId, title, members, spentBy, isTransfer)
 		} else {
-			handleRenderAddExpensePage(c, projectId, title, members, spentBy, isTransfer)
+			renderAddExpensePage(c, projectId, title, members, spentBy, isTransfer)
 		}
 	}
 }
@@ -84,7 +85,7 @@ func handleAddExpense(c *gin.Context, projectId string, title string, members []
 	c.Redirect(http.StatusFound, fmt.Sprintf("/t/%s", projectId))
 }
 
-func handleRenderAddExpensePage(c *gin.Context, projectId string, title string, members []*models.Member, spentBy []int, isTransfer bool) {
+func renderAddExpensePage(c *gin.Context, projectId string, title string, members []*models.Member, spentBy []int, isTransfer bool) {
 	type page struct {
 		IsEdit  bool
 		Members []*models.Member
@@ -97,6 +98,7 @@ func handleRenderAddExpensePage(c *gin.Context, projectId string, title string, 
 	paidByStr := c.Query("paid_by")
 	paidById, _ := strconv.Atoi(paidByStr)
 	userId, _ := cookies.GetUserId(c, projectId)
+
 	paidByMember := &models.Member{}
 	if paidById > 0 {
 		var err error

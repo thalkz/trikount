@@ -38,7 +38,7 @@ func main() {
 
 	project := r.Group("/t")
 	project.Use(middleware.SetProjectCookie())
-	project.Use(middleware.SetUserIdCookie())
+	project.Use(middleware.SetUserCookie())
 	{
 		project.GET("/:projectId/", page.Balance())
 		project.GET("/:projectId/expenses", page.Expenses())

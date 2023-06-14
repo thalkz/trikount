@@ -28,7 +28,11 @@ func Settings() gin.HandlerFunc {
 }
 
 func handleDeleteProject(c *gin.Context, projectId string) {
-	database.DeleteProject(projectId)
+	err := database.DeleteProject(projectId)
+	if err != nil {
+		error_helper.HTML(http.StatusInternalServerError, err, c)
+		return
+	}
 	c.Redirect(http.StatusFound, "/")
 }
 

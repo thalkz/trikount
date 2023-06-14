@@ -26,7 +26,13 @@ func Balance() gin.HandlerFunc {
 
 	return func(c *gin.Context) {
 		projectId := c.Param("projectId")
-		showTutorial := shouldShowTutorial(c)
+		hideTutorial := c.Query("show_tutorial") == "false"
+
+		if hideTutorial {
+			cookies.UnsetShowTutorial(c)
+		}
+
+		shouldShowTutorial := !hideTutorial && cookies.ShouldShowTutorial(c)
 
 		project, err := database.GetProject(projectId)
 		if err != nil {
@@ -54,20 +60,9 @@ func Balance() gin.HandlerFunc {
 			Transfers:      balance.GetTransfers(),
 			TotalSpent:     format.ToEuro(totalSpent),
 			Balance:        balance.Members,
-			ShowTutorial:   showTutorial,
+			ShowTutorial:   shouldShowTutorial,
 			ChooseUsername: chooseUsername,
 		})
-	}
-}
-
-func shouldShowTutorial(c *gin.Context) bool {
-	if c.Query("show_tutorial") == "false" {
-		log.Printf("DEBUG: Set show_tutorial=false")
-		c.SetCookie("show_tutorial", "false", 0, "/", "", false, true)
-		return false
-	} else {
-		showTutorial, _ := c.Cookie("show_tutorial")
-		return showTutorial == "true"
 	}
 }
 

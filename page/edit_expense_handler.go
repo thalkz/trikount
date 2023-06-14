@@ -30,10 +30,10 @@ func EditExpense() gin.HandlerFunc {
 			return
 		}
 
-		if title == "" {
-			handleRenderEditExpensePage(c, projectId, expenseId, members)
-		} else {
+		if title != "" {
 			handleEditExpense(c, projectId, members, expenseId, title)
+		} else {
+			renderEditExpensePage(c, projectId, expenseId, members)
 		}
 	}
 }
@@ -71,7 +71,7 @@ func handleEditExpense(c *gin.Context, projectId string, members []*models.Membe
 	c.Redirect(http.StatusFound, fmt.Sprintf("/t/%s", projectId))
 }
 
-func handleRenderEditExpensePage(c *gin.Context, projectId string, expenseId int, members []*models.Member) {
+func renderEditExpensePage(c *gin.Context, projectId string, expenseId int, members []*models.Member) {
 	type page struct {
 		IsEdit  bool
 		Members []*models.Member

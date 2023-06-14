@@ -14,16 +14,12 @@ func AddMembers() gin.HandlerFunc {
 		projectId := c.Param("projectId")
 		memberNames := c.QueryArray("name")
 
-		if len(memberNames) == 0 {
-			handleRenderAddMembersPage(c)
-		} else {
+		if len(memberNames) > 0 {
 			handleAddMembers(c, projectId, memberNames)
+		} else {
+			renderAddMembersPage(c)
 		}
 	}
-}
-
-func handleRenderAddMembersPage(c *gin.Context) {
-	c.HTML(http.StatusOK, "add_members.html", nil)
 }
 
 func handleAddMembers(c *gin.Context, projectId string, memberNames []string) {
@@ -36,4 +32,8 @@ func handleAddMembers(c *gin.Context, projectId string, memberNames []string) {
 	}
 
 	c.Redirect(http.StatusFound, fmt.Sprintf("/t/%s", projectId))
+}
+
+func renderAddMembersPage(c *gin.Context) {
+	c.HTML(http.StatusOK, "add_members.html", nil)
 }

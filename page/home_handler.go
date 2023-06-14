@@ -2,9 +2,9 @@ package page
 
 import (
 	"net/http"
-	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/thalkz/trikount/cookies"
 	"github.com/thalkz/trikount/database"
 	"github.com/thalkz/trikount/error_helper"
 	"github.com/thalkz/trikount/models"
@@ -16,11 +16,7 @@ func Home() gin.HandlerFunc {
 	}
 
 	return func(c *gin.Context) {
-		projectIds := []string{}
-		projectIdsStr, err := c.Cookie("project_ids")
-		if err == nil {
-			projectIds = strings.Split(projectIdsStr, ",")
-		}
+		projectIds := cookies.GetSavedProjectIds(c)
 
 		projects, err := database.GetProjects(projectIds)
 		if err != nil {

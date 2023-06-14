@@ -21,14 +21,14 @@
     color: #52B788;
 }
 
-#tutorial-container {
+#highlight-container {
     border-radius: 10px;
     border: 0.5px solid #033c21;
     background-color: #b2ebd0;
     padding: 20px;
 }
 
-#tutorial-container button {
+#highlight-container button {
     border-color: #033c21;
     color: #033c21;
 }

@@ -8,7 +8,7 @@
         {{template "nav.html"}}
 
         {{if and .ShowTutorial (not .ChooseUsername)}}
-        <div id="tutorial-container">
+        <div id="highlight-container">
             <p>Sauvegarde et partage le lien de ce trikount quelque-part pour pouvoir y retourner
                 facilement.
             </p>
@@ -33,7 +33,7 @@
         {{end}}
 
         {{if .ChooseUsername}}
-        <div id="tutorial-container">
+        <div id="highlight-container">
             <h5>👋 Bienvenue ! Qui est tu ?</h5>
             {{range .Balance}}
             <button onclick="location.href='?user_id={{.Id}}'">

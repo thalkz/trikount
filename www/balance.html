@@ -61,12 +61,12 @@
             {{range .Balance}}
             <li>
                 {{.Name}}:
-                {{if eq .Balance 0.0}}
-                <b>{{.FormattedBalance}}</b>
-                {{else if gt .Balance 0.0}}
+                {{if lt .Balance -0.01}}
+                <b style="color:red;">{{.FormattedBalance}}</b>
+                {{else if gt .Balance 0.01}}
                 <b style="color:green;">{{.FormattedBalance}}</b>
                 {{else}}
-                <b style="color:red;">{{.FormattedBalance}}</b>
+                <b>{{.FormattedBalance}}</b>
                 {{end}}
                 • <small>total dépensé: {{.FormattedNoTransferSpent}}</small>
             </li>

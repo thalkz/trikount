@@ -21,7 +21,7 @@
 </body>
 
 <script>
-    function addInput() {
+    function addInputField() {
         let form = document.getElementById("member-inputs");
         let inputNode = document.createElement('input');
         inputNode.setAttribute('type', 'text');
@@ -41,8 +41,8 @@
         }
     }
 
-    addInput()
-    document.getElementById("plus-one").onclick = addInput
+    addInputField()
+    document.getElementById("plus-one").onclick = addInputField
     document.getElementById("minus-one").onclick = removeInputField
 
 </script>

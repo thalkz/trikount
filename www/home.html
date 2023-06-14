@@ -20,8 +20,7 @@
                 <div class="rounded-container">
                     <p>Mes Trikounts récents</p>
                     {{range .Projects}}
-                    <button class="has-icon" onclick="location.href='/t/{{.Id}}'">
-                        <i class="fa-solid fa-plus"></i>
+                    <button onclick="location.href='/t/{{.Id}}'">
                         <span>{{.Name}}</span>
                     </button>
                     <br />

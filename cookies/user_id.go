@@ -25,6 +25,11 @@ func SetUserId(c *gin.Context, projectId string, userIdStr string) {
 	c.SetCookie(key, value, cookieExpireSeconds, "/", "", false, true)
 }
 
+func UnsetUserId(c *gin.Context, projectId string) {
+	key := toCookieKey(projectId)
+	c.SetCookie(key, "", 0, "/", "", false, true)
+}
+
 func GetUserId(c *gin.Context, projectId string) (int, error) {
 	key := toCookieKey(projectId)
 	userIdStr, err := c.Cookie(key)

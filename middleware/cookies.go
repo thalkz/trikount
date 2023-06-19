@@ -17,8 +17,13 @@ func SetProjectCookie() gin.HandlerFunc {
 func SetUserCookie() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		userIdStr, exists := c.GetQuery("user_id")
-		if exists {
-			projectId := c.Param("projectId")
+		if !exists {
+			return
+		}
+		projectId := c.Param("projectId")
+		if userIdStr == "" {
+			cookies.UnsetUserId(c, projectId)
+		} else {
 			cookies.SetUserId(c, projectId, userIdStr)
 		}
 	}

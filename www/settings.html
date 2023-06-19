@@ -10,12 +10,14 @@
             <h5>Participants</h5>
             <ul>
                 {{range .Members}}
-                <li>{{.Name}}
+                <li>
                     {{if eq .Id $.UserId}}
-                    <a href='/t/{{$.Project.Id}}/?user_id='>
-                        [ Se déconnecter ]
-                    </a>
+                    {{template "username.html" .Name}}
+                    <a href='/t/{{$.Project.Id}}/?user_id='>[ Se déconnecter ]</a>
+                    {{else}}
+                    {{.Name}}
                     {{end}}
+
                 </li>
                 {{end}}
             </ul>

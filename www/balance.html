@@ -60,7 +60,7 @@
         <ul>
             {{range .Balance}}
             <li>
-                {{.Name}}:
+                {{if eq .Id $.UserId}}{{template "username.html" .Name}}{{else}}{{.Name}}{{end}}:
                 {{if lt .Balance -0.01}}
                 <b style="color:red;">{{.FormattedBalance}}</b>
                 {{else if gt .Balance 0.01}}
@@ -78,7 +78,8 @@
             <h5>Comment équilibrer ?</h5>
             {{range .Transfers}}
             <p>
-                {{.From.Name}} doit <b>{{.FormattedAmount}}</b> à {{.To.Name}}
+                {{if eq .From.Id $.UserId}}{{template "username.html" .From.Name}}{{else}}{{.From.Name}}{{end}}
+                doit <b>{{.FormattedAmount}}</b> à {{.To.Name}}
                 (<a
                     href="/t/{{$.ProjectId}}/expenses/add?name=Remboursement&amount={{.Amount}}&paid_by={{.From.Id}}&{{.To.Id}}=on&is_transfer=on">rembourser</a>)
             </p>

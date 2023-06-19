@@ -31,15 +31,26 @@ func UnsetUserId(c *gin.Context, projectId string) {
 }
 
 func GetUserId(c *gin.Context, projectId string) (int, error) {
+	userIdStr, exists := c.GetQuery("user_id")
+	if exists && userIdStr == "" {
+		return -1, errors.Errorf("user_id is being unset")
+	} else if exists {
+		userId, err := strconv.Atoi(userIdStr)
+		if err != nil {
+			return -1, errors.Wrapf(err, "failed to parse user_id %v", userIdStr)
+		}
+		return userId, nil
+	}
+
 	key := toCookieKey(projectId)
-	userIdStr, err := c.Cookie(key)
+	cookieUserIdStr, err := c.Cookie(key)
 	if err != nil {
 		return -1, errors.Wrapf(err, "failed to get userId from key=%v", key)
 	}
 
-	userId, err := strconv.Atoi(userIdStr)
+	userId, err := strconv.Atoi(cookieUserIdStr)
 	if err != nil {
-		return -1, errors.Wrapf(err, "failed to parse userId %v", userIdStr)
+		return -1, errors.Wrapf(err, "failed to parse userId %v", cookieUserIdStr)
 	}
 
 	return userId, nil

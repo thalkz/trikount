@@ -1,9 +1,8 @@
 package page
 
 import (
-	"log"
+	"fmt"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/thalkz/trikount/cookies"
@@ -22,6 +21,7 @@ func Balance() gin.HandlerFunc {
 		Transfers      []*models.Transfer
 		ShowTutorial   bool
 		ChooseUsername bool
+		UserId         int
 	}
 
 	return func(c *gin.Context) {
@@ -46,7 +46,9 @@ func Balance() gin.HandlerFunc {
 			return
 		}
 
-		chooseUsername := shouldChooseUsername(c, projectId, balance.Members)
+		userId, err := cookies.GetUserId(c, projectId)
+		fmt.Printf("userId %v, err=%v", userId, err)
+		chooseUsername := err != nil
 
 		totalSpent, err := database.GetTotalSpent(projectId)
 		if err != nil {
@@ -62,33 +64,7 @@ func Balance() gin.HandlerFunc {
 			Balance:        balance.Members,
 			ShowTutorial:   shouldShowTutorial,
 			ChooseUsername: chooseUsername,
+			UserId:         userId,
 		})
 	}
-}
-
-func shouldChooseUsername(c *gin.Context, projectId string, members []*models.MemberBalance) bool {
-	queryUserIdStr, exists := c.GetQuery("user_id")
-	if exists && queryUserIdStr == "" {
-		return true
-	}
-
-	queryUserId, _ := strconv.Atoi(queryUserIdStr)
-
-	for _, member := range members {
-		if member.Id == queryUserId {
-			return false
-		}
-	}
-
-	userId, err := cookies.GetUserId(c, projectId)
-	if err != nil {
-		log.Printf("DEBUG: failed to get cookie %s: %s", projectId, err)
-		return true
-	}
-	for _, member := range members {
-		if member.Id == userId {
-			return false
-		}
-	}
-	return true
 }

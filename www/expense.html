@@ -20,7 +20,7 @@
         Pour
         <ul>
             {{range .Expense.SpentBy}}
-            <li>{{.Name}}: <b>{{$.Expense.FormattedAmountPerMember}}</b></li>
+            <li>{{if eq .Id $.UserId}}{{template "username.html" .Name}}{{else}}{{.Name}}{{end}}: <b>{{$.Expense.FormattedAmountPerMember}}</b></li>
             {{end}}
         </ul>
 

@@ -52,13 +52,13 @@
 - [x] bug: Editing an expense shows too many digits
 - [ ] feat: Show how much each expense impacts your balance
 - [ ] feat: Add notifications for each added expense/refund
-- [ ] feat: Highlight my information in balance.html
+- [x] feat: Highlight my information in balance.html
 - [ ] feat: Rework UI with a Neobrutalism style
 - [ ] feat: Validate user input (project, expense, member)
-- [ ] feat: Create an "about" page
 
 ## Backlog
 
+- [ ] feat: Create an "about" page
 - [ ] chore: Add unit tests
 - [ ] feat: Add "parts" to expenses
 - [ ] feat: Admin script for listing projects and members

@@ -16,6 +16,9 @@
                     <a href='/t/{{$.Project.Id}}/?user_id='>[ Se déconnecter ]</a>
                     {{else}}
                     {{.Name}}
+                    <a href='#' onclick="onRemoveMember('{{.Id}}', '{{.Name}}')">
+                        [ Retirer ]
+                    </a>
                     {{end}}
 
                 </li>
@@ -44,5 +47,14 @@
         <br />
     </div>
 </body>
+
+<script>
+    function onRemoveMember(userId, username) {
+        const ok = confirm(`Êtes-vous sur de vouloir retirer ${username} ?`);
+        if (ok) {
+            location.href = `?remove_member=${userId}`
+        }
+    }
+</script>
 
 </html>

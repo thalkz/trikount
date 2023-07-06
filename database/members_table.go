@@ -13,6 +13,42 @@ func AddMember(projectId string, name string) error {
 	return nil
 }
 
+func RemoveMember(projectId string, id int) error {
+	isActive := isMemberActive(id)
+	if isActive {
+		return errors.Errorf("failed to remove member with id = %v: member is part of one or more expenses", id)
+	}
+
+	_, err := db.Exec(`DELETE FROM members WHERE project_id = $1 AND id = $2`, projectId, id)
+	if err != nil {
+		return errors.Wrapf(err, "failed to remove member in project %v (id=%v)", projectId, id)
+	}
+
+	return nil
+}
+
+func isMemberActive(userId int) bool {
+	var isActive bool
+	rows, err := db.Query(`SELECT * FROM spent_by WHERE member_id = $1`, userId)
+	if err != nil {
+		isActive = true
+	}
+
+	for rows.Next() {
+		isActive = true
+	}
+
+	rows, err = db.Query(`SELECT * FROM expenses WHERE paid_by = $1`, userId)
+	if err != nil {
+		isActive = true
+	}
+	for rows.Next() {
+		isActive = true
+	}
+
+	return isActive
+}
+
 func GetMembers(projectId string) ([]*models.Member, error) {
 	rows, err := db.Query(`SELECT id, name FROM members WHERE project_id = $1`, projectId)
 	if err != nil {

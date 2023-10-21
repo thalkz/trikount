@@ -26,7 +26,7 @@ func main() {
 	close, err := database.Setup()
 	defer close()
 	if err != nil {
-		log.Fatalf("failed to setup database: %v", err)
+		log.Fatalf("FATAL: failed to setup database: %v", err)
 	}
 
 	r := gin.Default()
@@ -49,5 +49,7 @@ func main() {
 		project.GET("/:projectId/settings", page.Settings())
 	}
 
-	r.Run()
+	port := os.Getenv("PORT")
+	log.Printf("INFO: server listening on port %v", port)
+	r.Run(":" + port)
 }

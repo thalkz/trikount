@@ -1,7 +1,6 @@
 package page
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -47,7 +46,6 @@ func Balance() gin.HandlerFunc {
 		}
 
 		userId, err := cookies.GetUserId(c, projectId)
-		fmt.Printf("userId %v, err=%v", userId, err)
 		chooseUsername := err != nil
 
 		totalSpent, err := database.GetTotalSpent(projectId)

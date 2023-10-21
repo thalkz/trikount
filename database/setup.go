@@ -50,7 +50,7 @@ func runAllMigrations() error {
 
 		hasMigration := fileExists(filename)
 		if !hasMigration {
-			fmt.Printf("INFO: Database migrations completed: %s does not exists\n", filename)
+			log.Printf("INFO: Database migrations completed: %s does not exists\n", filename)
 			break
 		}
 

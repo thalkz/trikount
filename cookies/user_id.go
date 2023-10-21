@@ -2,6 +2,7 @@ package cookies
 
 import (
 	"fmt"
+	"log"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -15,7 +16,7 @@ func toCookieKey(projectId string) string {
 func SetUserId(c *gin.Context, projectId string, userIdStr string) {
 	userId, err := strconv.Atoi(userIdStr)
 	if err != nil {
-		fmt.Printf("failed to parse userId to integer %v\n", userIdStr)
+		log.Printf("ERROR: failed to parse userId to integer %v\n", userIdStr)
 		return
 	}
 

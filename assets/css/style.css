@@ -48,6 +48,10 @@ label {
     display: inline;
 }
 
+hr {
+    margin: 1em auto;
+}
+
 .clickable-container p:hover {
     cursor: pointer;
 }

@@ -118,6 +118,40 @@ func GetExpenses(projectId string) ([]*models.Expense, error) {
 	return expenses, nil
 }
 
+func GetExpenseWithParts(projectId string, memberId int) ([]*models.ExpenseWithPart, error) {
+	rows, err := db.Query(`SELECT expenses.id, expenses.title, expenses.amount, members.id, members.name, expenses.is_transfer, expenses.updated_at, iif(user_spent.member_id = ? AND v_parts.is_transfer = False, v_parts.amount, 0) as part
+			FROM expenses
+			JOIN members ON expenses.paid_by = members.id
+			JOIN v_parts ON v_parts.expense_id = expenses.id		
+			LEFT JOIN (SELECT * FROM spent_by WHERE member_id = ?) as user_spent ON expenses.id = user_spent.expense_id
+		WHERE expenses.project_id = ?
+		ORDER BY expenses.id desc`, memberId, memberId, projectId)
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to get expense with parts")
+	}
+
+	var expenseWithParts []*models.ExpenseWithPart
+	for rows.Next() {
+		var expense models.ExpenseWithPart
+		var updatedAtStr string
+		err := rows.Scan(&expense.Id, &expense.Title, &expense.Amount, &expense.PaidBy.Id, &expense.PaidBy.Name, &expense.IsTransfer, &updatedAtStr, &expense.Part)
+		if err != nil {
+			return nil, errors.Wrap(err, "failed to scan expense row")
+		}
+		expense.UpdatedAt, err = time.Parse(time.UnixDate, updatedAtStr)
+		if err != nil {
+			return nil, errors.Wrap(err, "failed to parse time")
+		}
+		expenseWithParts = append(expenseWithParts, &expense)
+	}
+	err = rows.Err()
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to scan expense with parts")
+	}
+
+	return expenseWithParts, nil
+}
+
 func GetTotalSpent(projectId string) (float64, error) {
 	row := db.QueryRow(`SELECT COALESCE(SUM(amount), 0.0) AS total FROM expenses WHERE project_id = $1 AND is_transfer = FALSE`, projectId)
 	var total float64

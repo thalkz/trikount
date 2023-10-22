@@ -30,7 +30,7 @@ func (e Expense) FormattedAmount() string {
 }
 
 func (e Expense) FormattedTimeAgo() string {
-	return timeago.French.Format(e.UpdatedAt)
+	return timeago.French.Format(e.CreatedAt)
 }
 
 func (e Expense) HasSpent(id int) bool {
@@ -40,4 +40,12 @@ func (e Expense) HasSpent(id int) bool {
 		}
 	}
 	return false
+}
+
+func (e Expense) HtmlDate() string {
+	return e.CreatedAt.Format(time.DateOnly)
+}
+
+func (e Expense) HtmlTime() string {
+	return e.CreatedAt.Format("15:04")
 }

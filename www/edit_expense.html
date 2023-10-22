@@ -13,6 +13,9 @@
         <h3>Nouvelle dépense</h3>
         {{end}}
         <form>
+            <input type="date" id="date" name="date" value="{{.Expense.HtmlDate}}" required />
+            <input type="time" id="time" name="time" value="{{.Expense.HtmlTime}}" required />
+            <br/>
             Titre:
             <input class="u-full-width" type="text" id="name" name="name" placeholder="Ma dépense..."
                 value="{{.Expense.Title}}" required>

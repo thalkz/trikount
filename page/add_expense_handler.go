@@ -76,8 +76,15 @@ func handleAddExpense(c *gin.Context, projectId string, title string, members []
 		return
 	}
 
-	now := time.Now()
-	err = database.AddExpense(projectId, title, amount, paidBy, spentBy, isTransfer, now)
+	dateStr := c.Query("date")
+	timeStr := c.Query("time")
+	createdAt, err := time.Parse("2006-01-02 15:04", dateStr+" "+timeStr)
+	if err != nil {
+		error_helper.HTML(http.StatusInternalServerError, err, c)
+		return
+	}
+
+	err = database.AddExpense(projectId, title, amount, paidBy, spentBy, isTransfer, createdAt)
 	if err != nil {
 		error_helper.HTML(http.StatusInternalServerError, err, c)
 		return
@@ -139,6 +146,7 @@ func renderAddExpensePage(c *gin.Context, projectId string, title string, member
 			PaidBy:     *paidByMember,
 			SpentBy:    spendByMembers,
 			IsTransfer: isTransfer,
+			CreatedAt:  time.Now(),
 		},
 	})
 }

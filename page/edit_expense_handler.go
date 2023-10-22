@@ -42,6 +42,8 @@ func handleEditExpense(c *gin.Context, projectId string, members []*models.Membe
 	amountStr := c.Query("amount")
 	paidByStr := c.Query("paid_by")
 	isTransfer := c.Query("isTransfer") == "on"
+	dateStr := c.Query("date")
+	timeStr := c.Query("time")
 
 	amount, err := strconv.ParseFloat(amountStr, 32)
 	if err != nil {
@@ -61,8 +63,13 @@ func handleEditExpense(c *gin.Context, projectId string, members []*models.Membe
 		}
 	}
 
-	now := time.Now()
-	err = database.EditExpense(projectId, expenseId, title, amount, paidBy, spendBy, isTransfer, now)
+	createdAt, err := time.Parse("2006-01-02 15:04", dateStr+" "+timeStr)
+	if err != nil {
+		error_helper.HTML(http.StatusInternalServerError, err, c)
+		return
+	}
+
+	err = database.EditExpense(projectId, expenseId, title, amount, paidBy, spendBy, isTransfer, createdAt)
 	if err != nil {
 		error_helper.HTML(http.StatusInternalServerError, err, c)
 		return

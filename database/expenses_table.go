@@ -7,9 +7,9 @@ import (
 	"github.com/thalkz/trikount/models"
 )
 
-func AddExpense(projectId string, title string, amount float64, paidBy int, spendBy []int, isTransfer bool, updatedAt time.Time) error {
-	row := db.QueryRow(`INSERT INTO expenses (title, amount, project_id, paid_by, is_transfer, updated_at)
-		values($1, $2, $3, $4, $5, $6) RETURNING id`, title, amount, projectId, paidBy, isTransfer, updatedAt.Format(time.UnixDate))
+func AddExpense(projectId string, title string, amount float64, paidBy int, spendBy []int, isTransfer bool, createdAt time.Time) error {
+	row := db.QueryRow(`INSERT INTO expenses (title, amount, project_id, paid_by, is_transfer, created_at)
+		values($1, $2, $3, $4, $5, $6) RETURNING id`, title, amount, projectId, paidBy, isTransfer, createdAt.Format(time.DateTime))
 	var expenseId int
 	err := row.Scan(&expenseId)
 	if err != nil {
@@ -26,7 +26,7 @@ func AddExpense(projectId string, title string, amount float64, paidBy int, spen
 	return nil
 }
 
-func EditExpense(projectId string, expenseId int, title string, amount float64, paidBy int, spentBy []int, isTransfer bool, updatedAt time.Time) error {
+func EditExpense(projectId string, expenseId int, title string, amount float64, paidBy int, spentBy []int, isTransfer bool, createdAt time.Time) error {
 	tx, err := db.Begin()
 	if err != nil {
 		return errors.Wrap(err, "failed to begin tx")
@@ -34,9 +34,9 @@ func EditExpense(projectId string, expenseId int, title string, amount float64, 
 	defer tx.Rollback()
 
 	_, err = tx.Exec(`UPDATE expenses 
-		SET title = ?, amount = ?, paid_by = ?, is_transfer = ?, updated_at = ? 
+		SET title = ?, amount = ?, paid_by = ?, is_transfer = ?, created_at = ? 
 		WHERE id = ? AND project_id = ?`,
-		title, amount, paidBy, isTransfer, updatedAt.Format(time.UnixDate), expenseId, projectId)
+		title, amount, paidBy, isTransfer, createdAt.Format(time.DateTime), expenseId, projectId)
 	if err != nil {
 		return errors.Wrap(err, "failed to update expense")
 	}
@@ -87,11 +87,11 @@ func DeleteExpense(projectId string, expenseId int) error {
 }
 
 func GetExpenses(projectId string) ([]*models.Expense, error) {
-	rows, err := db.Query(`SELECT expenses.id, expenses.title, expenses.amount, members.id, members.name, expenses.is_transfer, expenses.updated_at
+	rows, err := db.Query(`SELECT expenses.id, expenses.title, expenses.amount, members.id, members.name, expenses.is_transfer, expenses.created_at
 		FROM expenses 
 		JOIN members ON expenses.paid_by = members.id
 		WHERE expenses.project_id = $1
-		ORDER BY expenses.id desc`, projectId)
+		ORDER BY expenses.created_at desc`, projectId)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to get expenses")
 	}
@@ -99,12 +99,12 @@ func GetExpenses(projectId string) ([]*models.Expense, error) {
 	var expenses []*models.Expense
 	for rows.Next() {
 		var expense models.Expense
-		var updatedAtStr string
-		err := rows.Scan(&expense.Id, &expense.Title, &expense.Amount, &expense.PaidBy.Id, &expense.PaidBy.Name, &expense.IsTransfer, &updatedAtStr)
+		var createdAtStr string
+		err := rows.Scan(&expense.Id, &expense.Title, &expense.Amount, &expense.PaidBy.Id, &expense.PaidBy.Name, &expense.IsTransfer, &createdAtStr)
 		if err != nil {
 			return nil, errors.Wrap(err, "failed to scan expense row")
 		}
-		expense.UpdatedAt, err = time.Parse(time.UnixDate, updatedAtStr)
+		expense.CreatedAt, err = time.Parse(time.DateTime, createdAtStr)
 		if err != nil {
 			return nil, errors.Wrap(err, "failed to parse time")
 		}
@@ -119,13 +119,13 @@ func GetExpenses(projectId string) ([]*models.Expense, error) {
 }
 
 func GetExpenseWithParts(projectId string, memberId int) ([]*models.ExpenseWithPart, error) {
-	rows, err := db.Query(`SELECT expenses.id, expenses.title, expenses.amount, members.id, members.name, expenses.is_transfer, expenses.updated_at, iif(user_spent.member_id = ? AND v_parts.is_transfer = False, v_parts.amount, 0) as part
+	rows, err := db.Query(`SELECT expenses.id, expenses.title, expenses.amount, members.id, members.name, expenses.is_transfer, expenses.created_at, iif(user_spent.member_id = ? AND v_parts.is_transfer = False, v_parts.amount, 0) as part
 			FROM expenses
 			JOIN members ON expenses.paid_by = members.id
 			JOIN v_parts ON v_parts.expense_id = expenses.id		
 			LEFT JOIN (SELECT * FROM spent_by WHERE member_id = ?) as user_spent ON expenses.id = user_spent.expense_id
 		WHERE expenses.project_id = ?
-		ORDER BY expenses.id desc`, memberId, memberId, projectId)
+		ORDER BY expenses.created_at desc`, memberId, memberId, projectId)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to get expense with parts")
 	}
@@ -133,12 +133,12 @@ func GetExpenseWithParts(projectId string, memberId int) ([]*models.ExpenseWithP
 	var expenseWithParts []*models.ExpenseWithPart
 	for rows.Next() {
 		var expense models.ExpenseWithPart
-		var updatedAtStr string
-		err := rows.Scan(&expense.Id, &expense.Title, &expense.Amount, &expense.PaidBy.Id, &expense.PaidBy.Name, &expense.IsTransfer, &updatedAtStr, &expense.Part)
+		var createdAtStr string
+		err := rows.Scan(&expense.Id, &expense.Title, &expense.Amount, &expense.PaidBy.Id, &expense.PaidBy.Name, &expense.IsTransfer, &createdAtStr, &expense.Part)
 		if err != nil {
 			return nil, errors.Wrap(err, "failed to scan expense row")
 		}
-		expense.UpdatedAt, err = time.Parse(time.UnixDate, updatedAtStr)
+		expense.CreatedAt, err = time.Parse(time.DateTime, createdAtStr)
 		if err != nil {
 			return nil, errors.Wrap(err, "failed to parse time")
 		}
@@ -163,18 +163,18 @@ func GetTotalSpent(projectId string) (float64, error) {
 }
 
 func GetExpense(projectId string, id int) (*models.Expense, error) {
-	row := db.QueryRow(`SELECT expenses.id, expenses.title, expenses.amount, members.id, members.name, expenses.is_transfer, expenses.updated_at
+	row := db.QueryRow(`SELECT expenses.id, expenses.title, expenses.amount, members.id, members.name, expenses.is_transfer, expenses.created_at
 		FROM expenses 
 		JOIN members ON expenses.paid_by = members.id
 		WHERE expenses.id = $1 AND expenses.project_id = $2`, id, projectId)
 
 	var expense models.Expense
-	var updatedAtStr string
-	err := row.Scan(&expense.Id, &expense.Title, &expense.Amount, &expense.PaidBy.Id, &expense.PaidBy.Name, &expense.IsTransfer, &updatedAtStr)
+	var createdAtStr string
+	err := row.Scan(&expense.Id, &expense.Title, &expense.Amount, &expense.PaidBy.Id, &expense.PaidBy.Name, &expense.IsTransfer, &createdAtStr)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to scan expense")
 	}
-	expense.UpdatedAt, err = time.Parse(time.UnixDate, updatedAtStr)
+	expense.CreatedAt, err = time.Parse(time.DateTime, createdAtStr)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to parse time")
 	}

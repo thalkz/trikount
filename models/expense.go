@@ -13,7 +13,7 @@ type Expense struct {
 	Amount     float64
 	PaidBy     Member
 	SpentBy    []*Member
-	UpdatedAt  time.Time
+	CreatedAt  time.Time
 	IsTransfer bool
 }
 

@@ -82,7 +82,7 @@ func handleAddExpense(c *gin.Context, projectId string, title string, members []
 		error_helper.HTML(http.StatusInternalServerError, err, c)
 		return
 	}
-	c.Redirect(http.StatusFound, fmt.Sprintf("/t/%s", projectId))
+	c.Redirect(http.StatusFound, fmt.Sprintf("/t/%s/expenses", projectId))
 }
 
 func renderAddExpensePage(c *gin.Context, projectId string, title string, members []*models.Member, spentBy []int, isTransfer bool) {

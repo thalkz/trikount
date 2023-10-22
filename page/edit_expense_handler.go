@@ -68,7 +68,7 @@ func handleEditExpense(c *gin.Context, projectId string, members []*models.Membe
 		return
 	}
 
-	c.Redirect(http.StatusFound, fmt.Sprintf("/t/%s", projectId))
+	c.Redirect(http.StatusFound, fmt.Sprintf("/t/%s/expenses/%v", projectId, expenseId))
 }
 
 func renderEditExpensePage(c *gin.Context, projectId string, expenseId int, members []*models.Member) {

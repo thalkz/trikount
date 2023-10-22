@@ -6,7 +6,6 @@
 <body>
     <div class="container">
         {{template "nav.html"}}
-        <h3>Dépenses</h3>
 
         {{if not .ExpenseParts}}
         <p>Aucune dépense pour le moment !</p>
@@ -20,6 +19,8 @@
         {{range .ExpenseParts}}
         <div class="clickable-container">
             <p onclick="location.href='/t/{{$.ProjectId}}/expenses/{{.Id}}'">
+                <small>{{.FormattedTimeAgo}}</small>
+                <br/>
                 <b>{{.Title}}</b>
                  • payé par 
                 {{if eq .PaidBy.Id $.UserId}}

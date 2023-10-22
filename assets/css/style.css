@@ -86,3 +86,7 @@ hr {
 .username {
     font-weight: bold;
 }
+
+small {
+    color: #7e8081;
+}

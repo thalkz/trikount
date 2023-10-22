@@ -6,16 +6,18 @@
 <body>
     <div class="container">
         {{template "nav.html"}}
-        <h3>
-            {{.Expense.Title}}
-            • <b>{{.Expense.FormattedAmount}}</b>
-        </h3>
-        <p><em>payé par {{.Expense.PaidBy.Name}}</em>
+        <small>{{.Expense.FormattedTimeAgo}}</small>
+        <h5>
+            <b>{{.Expense.Title}}</b>
+             • payé par {{.Expense.PaidBy.Name}}
+        </h5>
+        
+        <p>
+            Total: <b>{{.Expense.FormattedAmount}}</b>
             {{if .Expense.IsTransfer}}
             <em> (rembousement)</em>
             {{end}}
             <br />
-            {{.Expense.FormattedTimeAgo}}
         </p>
         Pour
         <ul>

@@ -1,3 +1,5 @@
+-- WARNING: THIS STEP IS OVERRIDEN BY 6.sql
+
 PRAGMA user_version = 5;
 
 -- STEP 1) Add a "created_at" column, that uses the UnixDate format

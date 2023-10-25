@@ -7,7 +7,7 @@
     <div class="container">
         {{template "nav.html"}}
 
-        {{if not .ExpenseParts}}
+        {{if not .Content}}
         <p>Aucune dépense pour le moment !</p>
         {{end}}
 
@@ -16,31 +16,33 @@
         </button>
 
         <br /><br />
-        {{range .ExpenseParts}}
+        {{range .Content}}
+        {{if .Date}}
+        <small>{{.Date}}</small>
+        <hr />
+        {{else}}
         <div class="clickable-container">
-            <p onclick="location.href='/t/{{$.ProjectId}}/expenses/{{.Id}}'">
-                <small>{{.FormattedTimeAgo}}</small>
-                <br/>
-                <b>{{.Title}}</b>
-                 • payé par 
-                {{if eq .PaidBy.Id $.UserId}}
-                    {{template "username.html" .PaidBy.Name}}
+            <p onclick="location.href='/t/{{$.ProjectId}}/expenses/{{.Expense.Id}}'">
+                <b>{{.Expense.Title}}</b>
+                • payé par
+                {{if eq .Expense.PaidBy.Id $.UserId}}
+                {{template "username.html" .Expense.PaidBy.Name}}
                 {{else}}
-                    {{.PaidBy.Name}}
+                {{.Expense.PaidBy.Name}}
                 {{end}}
                 <br />
-                {{.FormattedAmount}}
+                {{.Expense.FormattedAmount}}
                 <small>
-                    {{if .IsTransfer}}
-                        <em> (rembousement)</em>
+                    {{if .Expense.IsTransfer}}
+                    <em> (rembousement)</em>
                     {{else}}
-                        (Ma part: {{.FormattedPart}})
+                    (Ma part: {{.Expense.FormattedPart}})
                     {{end}}
                 </small>
-                <br />
             </p>
         </div>
         <hr />
+        {{end}}
         {{end}}
     </div>
 </body>

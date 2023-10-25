@@ -11,11 +11,16 @@ import (
 )
 
 func Expenses() gin.HandlerFunc {
+	type item struct {
+		Date    string
+		Expense *models.ExpenseWithPart
+	}
+
 	type page struct {
-		ProjectId    string
-		Name         string
-		ExpenseParts []*models.ExpenseWithPart
-		UserId       int
+		ProjectId string
+		Name      string
+		Content   []item
+		UserId    int
 	}
 
 	return func(c *gin.Context) {
@@ -34,11 +39,28 @@ func Expenses() gin.HandlerFunc {
 			return
 		}
 
+		content := []item{}
+		last := ""
+		for _, expense := range expenseParts {
+			date := expense.FormattedTimeAgo()
+			if last != date {
+				last = date
+				dateItem := item{
+					Date: date,
+				}
+				content = append(content, dateItem)
+			}
+			expenseItem := item{
+				Expense: expense,
+			}
+			content = append(content, expenseItem)
+		}
+
 		c.HTML(http.StatusOK, "expenses.html", page{
-			ProjectId:    projectId,
-			Name:         project.Name,
-			ExpenseParts: expenseParts,
-			UserId:       userId,
+			ProjectId: projectId,
+			Name:      project.Name,
+			Content:   content,
+			UserId:    userId,
 		})
 	}
 }

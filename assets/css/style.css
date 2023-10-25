@@ -56,6 +56,10 @@ hr {
     cursor: pointer;
 }
 
+.clickable-container p {
+    margin: 0em auto;
+}
+
 .tooltip {
     position: relative;
     display: inline-block;

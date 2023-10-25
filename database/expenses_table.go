@@ -91,7 +91,7 @@ func GetExpenses(projectId string) ([]*models.Expense, error) {
 		FROM expenses 
 		JOIN members ON expenses.paid_by = members.id
 		WHERE expenses.project_id = $1
-		ORDER BY expenses.created_at desc`, projectId)
+		ORDER BY expenses.created_at desc, expenses.id desc`, projectId)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to get expenses")
 	}
@@ -125,7 +125,7 @@ func GetExpenseWithParts(projectId string, memberId int) ([]*models.ExpenseWithP
 			JOIN v_parts ON v_parts.expense_id = expenses.id		
 			LEFT JOIN (SELECT * FROM spent_by WHERE member_id = ?) as user_spent ON expenses.id = user_spent.expense_id
 		WHERE expenses.project_id = ?
-		ORDER BY expenses.created_at desc`, memberId, memberId, projectId)
+		ORDER BY expenses.created_at desc, expenses.id desc`, memberId, memberId, projectId)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to get expense with parts")
 	}

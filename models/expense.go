@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"github.com/thalkz/trikount/format"
-	"github.com/xeonx/timeago"
 )
 
 type Expense struct {
@@ -30,7 +29,7 @@ func (e Expense) FormattedAmount() string {
 }
 
 func (e Expense) FormattedTimeAgo() string {
-	return timeago.French.Format(e.CreatedAt)
+	return format.FormatDateFrench(e.CreatedAt)
 }
 
 func (e Expense) HasSpent(id int) bool {
@@ -46,6 +45,6 @@ func (e Expense) HtmlDate() string {
 	return e.CreatedAt.Format(time.DateOnly)
 }
 
-func (e Expense) HtmlTime() string {
-	return e.CreatedAt.Format("15:04")
+func (e Expense) HasCreationDate() bool {
+	return e.CreatedAt.Year() > 1
 }

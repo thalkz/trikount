@@ -13,8 +13,7 @@
         <h3>Nouvelle dépense</h3>
         {{end}}
         <form>
-            <input type="date" id="date" name="date" value="{{.Expense.HtmlDate}}" required />
-            <input type="time" id="time" name="time" value="{{.Expense.HtmlTime}}" required />
+            <input type="date" id="datePicker" name="date" value="{{.Expense.HtmlDate}}" required />
             <br/>
             Titre:
             <input class="u-full-width" type="text" id="name" name="name" placeholder="Ma dépense..."
@@ -50,5 +49,16 @@
         </form>
     </div>
 </body>
+
+<!-- 
+    If the date is not set for the expense, set that date from today
+    This is done client-side, because the server does not know the timezone
+    of the client, and could set a wrong date in some cases.
+-->
+{{if not .Expense.HasCreationDate}}
+<script>
+    document.getElementById('datePicker').valueAsDate = new Date();
+</script>
+{{end}}
 
 </html>
